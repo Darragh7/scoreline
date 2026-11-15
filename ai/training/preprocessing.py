@@ -62,6 +62,32 @@ def load_static_csv(path: str, competition=None, seasons=None) -> pd.DataFrame:
     return out[STATIC_COLUMNS].sort_values("date", kind="stable").reset_index(drop=True)
 
 
+ODDS_REQUIRED = ["Date", "HomeTeam", "AwayTeam", "market_p_home", "market_p_draw", "market_p_away"]
+
+
+def load_odds_csv(path: str) -> pd.DataFrame:
+    """Stage 2: bookmaker probabilities (margin already removed) from ai/ml_pipeline/odds.py.
+
+    Returns home_team, away_team (canonical names), date (midnight UTC), market_p_home,
+    market_p_draw, market_p_away and odds_source. Used only as a BENCHMARK in evaluation,
+    never as a model input.
+    """
+    raw = pd.read_csv(path)
+    missing = [c for c in ODDS_REQUIRED if c not in raw.columns]
+    if missing:
+        raise ValueError(f"odds CSV {path} is missing columns: {missing}")
+    raw = raw.dropna(subset=ODDS_REQUIRED)
+    return pd.DataFrame({
+        "home_team": raw["HomeTeam"].map(canonical_team),
+        "away_team": raw["AwayTeam"].map(canonical_team),
+        "date": pd.to_datetime(raw["Date"], utc=True),
+        "market_p_home": raw["market_p_home"].astype(float),
+        "market_p_draw": raw["market_p_draw"].astype(float),
+        "market_p_away": raw["market_p_away"].astype(float),
+        "odds_source": raw["odds_source"] if "odds_source" in raw.columns else "unknown",
+    }).reset_index(drop=True)
+
+
 def merge_matches(*frames: pd.DataFrame) -> pd.DataFrame:
     """Stage 2/4: combine match tables from several sources into one timeline.
 
