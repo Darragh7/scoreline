@@ -1,7 +1,70 @@
+import json
+from io import BytesIO
+from urllib.error import HTTPError, URLError
 from unittest.mock import patch
 
-from django.test import TestCase
+from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
+
+from webplay.views import (
+    AuthenticationBackendUnavailable,
+    _call_auth_backend,
+    _decode_backend_response,
+    _store_account_session,
+)
+
+
+class AuthenticationBackendHelperTests(SimpleTestCase):
+
+    def test_decode_backend_response_accepts_json_objects(self):
+        self.assertEqual(_decode_backend_response(b'{"detail":"invalid"}'), {"detail": "invalid"})
+
+    def test_decode_backend_response_returns_empty_object_for_invalid_json(self):
+        self.assertEqual(_decode_backend_response(b"not json"), {})
+        self.assertEqual(_decode_backend_response(b"[]"), {})
+
+    @patch("webplay.views.urlopen")
+    @override_settings(BACKEND_API_URL="https://backend.test")
+    def test_call_auth_backend_sends_json_post_and_decodes_response(self, urlopen):
+        response = urlopen.return_value.__enter__.return_value
+        response.status = 201
+        response.read.return_value = b'{"user":{"user_id":123}}'
+        payload = {"email": "ada@example.com", "password": "secret"}
+
+        result = _call_auth_backend("signup", payload)
+
+        self.assertEqual(result, (201, {"user": {"user_id": 123}}))
+        request = urlopen.call_args.args[0]
+        self.assertEqual(request.full_url, "https://backend.test/users/signup")
+        self.assertEqual(request.get_method(), "POST")
+        self.assertEqual(request.get_header("Content-type"), "application/json")
+        self.assertEqual(json.loads(request.data), payload)
+        self.assertEqual(urlopen.call_args.kwargs["timeout"], 5)
+
+    @patch("webplay.views.urlopen")
+    def test_call_auth_backend_decodes_http_error_response(self, urlopen):
+        urlopen.side_effect = HTTPError(
+            "http://localhost:8002/users/login",
+            401,
+            "Unauthorized",
+            hdrs=None,
+            fp=BytesIO(b'{"detail":"Invalid credentials"}'),
+        )
+
+        result = _call_auth_backend("login", {"identifier": "ada@example.com"})
+
+        self.assertEqual(result, (401, {"detail": "Invalid credentials"}))
+
+    @patch("webplay.views.urlopen", side_effect=URLError("connection refused"))
+    def test_call_auth_backend_wraps_network_errors(self, _urlopen):
+        with self.assertRaises(AuthenticationBackendUnavailable):
+            _call_auth_backend("login", {})
+
+    def test_store_account_session_rejects_incomplete_backend_response(self):
+        request = type("Request", (), {"session": {}})()
+
+        with self.assertRaises(AuthenticationBackendUnavailable):
+            _store_account_session(request, {"user": {"user_id": "123"}})
 
 
 class AuthenticationViewTests(TestCase):
