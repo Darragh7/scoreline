@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - ScoreLine{% endblock %}
+
+{% block content %}
+<!-- CONTACT HERO -->
+<section class="relative pt-14 pb-12 overflow-hidden">
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-activeRed/10 rounded-full blur-[140px] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sportCard border border-activeRed/30 text-activeRed text-xs font-semibold uppercase tracking-widest mb-5 shadow-red-glow">
+                <i class="fa-solid fa-envelope"></i>
+                Get In Touch
+            </div>
+
+            <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white uppercase italic leading-none mb-5">
+                CONTACT <span class="inline-block pr-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-red-200 to-activeRed">SCORELINE</span>
+            </h1>
+
+            <p class="text-base sm:text-lg text-gray-300 leading-relaxed">
+                Have feedback on our <strong class="text-white">ScoreLine</strong> match outcome forecasts, questions about how overall player Elo ratings or team form are used, or spotted an issue in the app? Send us a message below.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT FORM & CHANNELS -->
+<section class="pb-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+            <!-- Left: Message Form -->
+            <div class="lg:col-span-7 glass-panel p-8 rounded-3xl border border-sportBorder">
+                <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Direct Message</span>
+                <h2 class="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tight mt-1 mb-6">
+                    SEND A MESSAGE
+                </h2>
+
+                <!-- Optional Django messages banner -->
+                {% if messages %}
+                    <div class="mb-6 space-y-2">
+                        {% for message in messages %}
+                            <div class="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Preview confirmation alert (for frontend testing before backend hookup) -->
+                <div id="contactSuccessBanner" class="hidden mb-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm flex items-start gap-3">
+                    <i class="fa-solid fa-circle-check text-emerald-400 mt-0.5"></i>
+                    <div>
+                        <strong class="font-bold text-white">Message ready!</strong> Thanks for reaching out to <strong class="text-white">ScoreLine</strong>. Connect this form to your Django view to save or email submissions.
+                    </div>
+                </div>
+
+                <form id="contactForm" method="post" action="{% url 'contact' %}" class="space-y-5">
+                    {% csrf_token %}
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="full_name" class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                                Your Name
+                            </label>
+                            <input
+                                type="text"
+                                id="full_name"
+                                name="full_name"
+                                required
+                                placeholder="Harshil Padhiyar"
+                                class="w-full bg-sportCard border border-sportBorder rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-activeRed transition-colors"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                                Email Address
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                required
+                                placeholder="you@example.com"
+                                class="w-full bg-sportCard border border-sportBorder rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-activeRed transition-colors"
+                            >
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="topic" class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                            Topic
+                        </label>
+                        <select
+                            id="topic"
+                            name="topic"
+                            class="w-full bg-sportCard border border-sportBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-activeRed transition-colors"
+                        >
+                            <option value="match_outcomes">Match Outcome Model & Probabilities</option>
+                            <option value="elo_data">Player Elo Ratings & Match Data</option>
+                            <option value="bug_report">Website / Predictor Bug Report</option>
+                            <option value="general">General Inquiry or Feedback</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="message" class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                            Message
+                        </label>
+                        <textarea
+                            id="message"
+                            name="message"
+                            rows="5"
+                            required
+                            placeholder="Tell us what you'd like to share with the ScoreLine team..."
+                            class="w-full bg-sportCard border border-sportBorder rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-activeRed transition-colors resize-y"
+                        ></textarea>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="w-full sm:w-auto px-8 py-4 bg-activeRed hover:bg-red-600 text-white font-bold rounded-xl shadow-red-glow hover:shadow-red-glow-lg transition-all uppercase tracking-wider text-xs sm:text-sm inline-flex items-center justify-center gap-2.5"
+                    >
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span>Send Message</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right: Contact Info & Quick Links -->
+            <div class="lg:col-span-5 space-y-6">
+                <div class="glass-panel p-7 rounded-3xl border border-sportBorder">
+                    <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Contact Channels</span>
+                    <h3 class="text-xl font-bold text-white uppercase tracking-wider mt-1 mb-5">
+                        SCORELINE SUPPORT
+                    </h3>
+
+                    <div class="space-y-4 text-sm">
+                        <div class="p-4 bg-sportCard rounded-2xl border border-sportBorder flex items-start gap-3.5">
+                            <div class="w-9 h-9 rounded-lg bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed shrink-0">
+                                <i class="fa-solid fa-at"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">Email</div>
+                                <div class="text-white font-semibold mt-0.5">support@scoreline-analytics.example</div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-sportCard rounded-2xl border border-sportBorder flex items-start gap-3.5">
+                            <div class="w-9 h-9 rounded-lg bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed shrink-0">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">Response Window</div>
+                                <div class="text-white font-semibold mt-0.5">Typically within 24–48 hours</div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-sportCard rounded-2xl border border-sportBorder flex items-start gap-3.5">
+                            <div class="w-9 h-9 rounded-lg bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed shrink-0">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">Model Details</div>
+                                <p class="text-xs text-gray-300 mt-0.5 leading-relaxed">
+                                    Curious how home win, draw, and away win probabilities work? Read our <a href="{% url 'about' %}" class="text-activeRed hover:underline font-semibold">About Us & Methodology</a> page.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytical Scope Note -->
+                <div class="p-6 rounded-2xl bg-activeRed/10 border border-activeRed/40">
+                    <div class="flex items-center gap-2 text-activeRed font-bold text-xs uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Analytical Purpose Only</span>
+                    </div>
+                    <p class="text-xs text-gray-200 leading-relaxed">
+                        ScoreLine provides match outcome probabilities for analytical exploration and learning—not betting or financial advice.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Remove this block once your Django view handles POST requests and redirects/renders messages
+    document.getElementById('contactForm')?.addEventListener('submit', function (event) {
+        if (!this.dataset.djangoHandled) {
+            event.preventDefault();
+            document.getElementById('contactSuccessBanner').classList.remove('hidden');
+            this.reset();
+        }
+    });
+</script>
+{% endblock %}
