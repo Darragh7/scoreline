@@ -1,0 +1,7 @@
+{
+  "leagues": [
+    { "code": "E0", "name": "Premier League", "country": "England" },
+    { "code": "SP1", "name": "La Liga", "country": "Spain" },
+    { "code": "F1", "name": "Ligue 1", "country": "France" }
+  ]
+}

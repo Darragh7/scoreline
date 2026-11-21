@@ -1,0 +1,31 @@
+{
+    // Start the site first (Live Server "Go Live", or the "Serve ScoreLine (port 5500)" task),
+    // then press F5. Pages must be served over http:// - file:// breaks fetch() calls.
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "ScoreLine: Chrome (localhost:5500)",
+            "url": "http://localhost:5500/index.html",
+            "webRoot": "${workspaceFolder}",
+            "preLaunchTask": "Serve ScoreLine (port 5500)"
+        },
+        {
+            "type": "msedge",
+            "request": "launch",
+            "name": "ScoreLine: Edge (localhost:5500)",
+            "url": "http://localhost:5500/index.html",
+            "webRoot": "${workspaceFolder}",
+            "preLaunchTask": "Serve ScoreLine (port 5500)"
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "ScoreLine: Chrome, predictor in mock mode",
+            "url": "http://localhost:5500/predictor.html?mode=mock",
+            "webRoot": "${workspaceFolder}",
+            "preLaunchTask": "Serve ScoreLine (port 5500)"
+        }
+    ]
+}

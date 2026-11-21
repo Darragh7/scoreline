@@ -1,0 +1,40 @@
+{
+  "_note": "Demo data only. Team names follow football-data.co.uk spelling (2024/25 line-ups). 'rating' is an ILLUSTRATIVE Elo-style number used solely to generate demo predictions for fixtures that are not in fixtures.json. It is not real model output.",
+  "teams": {
+    "E0": [
+      { "name": "Arsenal", "rating": 1890 }, { "name": "Aston Villa", "rating": 1760 },
+      { "name": "Bournemouth", "rating": 1660 }, { "name": "Brentford", "rating": 1650 },
+      { "name": "Brighton", "rating": 1690 }, { "name": "Chelsea", "rating": 1760 },
+      { "name": "Crystal Palace", "rating": 1650 }, { "name": "Everton", "rating": 1620 },
+      { "name": "Fulham", "rating": 1640 }, { "name": "Ipswich", "rating": 1530 },
+      { "name": "Leicester", "rating": 1540 }, { "name": "Liverpool", "rating": 1900 },
+      { "name": "Man City", "rating": 1930 }, { "name": "Man United", "rating": 1700 },
+      { "name": "Newcastle", "rating": 1750 }, { "name": "Nott'm Forest", "rating": 1640 },
+      { "name": "Southampton", "rating": 1510 }, { "name": "Tottenham", "rating": 1720 },
+      { "name": "West Ham", "rating": 1650 }, { "name": "Wolves", "rating": 1600 }
+    ],
+    "SP1": [
+      { "name": "Alaves", "rating": 1580 }, { "name": "Ath Bilbao", "rating": 1740 },
+      { "name": "Ath Madrid", "rating": 1820 }, { "name": "Barcelona", "rating": 1880 },
+      { "name": "Betis", "rating": 1690 }, { "name": "Celta", "rating": 1610 },
+      { "name": "Espanol", "rating": 1550 }, { "name": "Getafe", "rating": 1600 },
+      { "name": "Girona", "rating": 1720 }, { "name": "Las Palmas", "rating": 1560 },
+      { "name": "Leganes", "rating": 1540 }, { "name": "Mallorca", "rating": 1600 },
+      { "name": "Osasuna", "rating": 1610 }, { "name": "Real Madrid", "rating": 1920 },
+      { "name": "Sevilla", "rating": 1640 }, { "name": "Sociedad", "rating": 1700 },
+      { "name": "Valencia", "rating": 1610 }, { "name": "Valladolid", "rating": 1500 },
+      { "name": "Vallecano", "rating": 1600 }, { "name": "Villarreal", "rating": 1690 }
+    ],
+    "F1": [
+      { "name": "Angers", "rating": 1520 }, { "name": "Auxerre", "rating": 1540 },
+      { "name": "Brest", "rating": 1650 }, { "name": "Le Havre", "rating": 1520 },
+      { "name": "Lens", "rating": 1690 }, { "name": "Lille", "rating": 1720 },
+      { "name": "Lyon", "rating": 1700 }, { "name": "Marseille", "rating": 1730 },
+      { "name": "Monaco", "rating": 1760 }, { "name": "Montpellier", "rating": 1520 },
+      { "name": "Nantes", "rating": 1560 }, { "name": "Nice", "rating": 1690 },
+      { "name": "Paris SG", "rating": 1900 }, { "name": "Reims", "rating": 1590 },
+      { "name": "Rennes", "rating": 1660 }, { "name": "St Etienne", "rating": 1510 },
+      { "name": "Strasbourg", "rating": 1600 }, { "name": "Toulouse", "rating": 1600 }
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            // Zero-install static server (PowerShell + .NET HttpListener). Skips itself if port 5500 is already in use
+            // (e.g. Live Server is running), so F5 works either way.
+            "label": "Serve ScoreLine (port 5500)",
+            "type": "shell",
+            "command": "if (Get-NetTCPConnection -LocalPort 5500 -State Listen -ErrorAction SilentlyContinue) { Write-Host 'ScoreLine is running at http://localhost:5500/ (server already running)' } else { powershell -NoProfile -ExecutionPolicy Bypass -File \"${workspaceFolder}\\serve.ps1\" }",
+            "options": { "shell": { "executable": "powershell.exe", "args": ["-NoProfile", "-Command"] } },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "scoreline-serve",
+                "pattern": { "regexp": "^__never_matches__$" },
+                "background": {
+                    "activesBegin": ".",
+                    "beginsPattern": ".",
+                    "endsPattern": "ScoreLine is running at"
+                }
+            },
+            "presentation": { "reveal": "silent", "panel": "dedicated" }
+        }
+    ]
+}

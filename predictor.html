@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Predictor - ScoreLine</title>
+    <meta name="description" content="Pick a fixture and see ScoreLine's home win, draw and away win probabilities, expected goals and likely scorelines.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/tailwind-config.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="predictor" class="sport-grid min-h-screen flex flex-col antialiased selection:bg-activeRed selection:text-white">
+    <div id="site-header"></div>
+    <script src="js/layout.js"></script>
+
+    <main id="main" class="flex-1 w-full" tabindex="-1">
+        <!-- HERO -->
+        <section class="relative pt-12 pb-10 overflow-hidden">
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] max-w-full h-[550px] bg-activeRed/10 rounded-full blur-[140px] pointer-events-none" aria-hidden="true"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+                <div class="max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sportCard border border-activeRed/30 text-activeRed text-xs font-semibold uppercase tracking-widest mb-5 shadow-red-glow">
+                        <span class="w-2 h-2 rounded-full bg-activeRed pulse-active" aria-hidden="true"></span>
+                        Live Predictor
+                    </div>
+                    <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white uppercase italic leading-none mb-4">
+                        MATCH <span class="inline-block pr-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-red-200 to-activeRed">PREDICTOR</span>
+                    </h1>
+                    <p class="text-base sm:text-lg text-gray-300 leading-relaxed">
+                        Choose a league and two teams, or pick a fixture from the data, to see how likely a <strong class="text-white">home win</strong>, <strong class="text-white">draw</strong> or <strong class="text-white">away win</strong> is according to each of our models.
+                    </p>
+                </div>
+                <div id="sourceBadgeWrap" class="sl-tooltip self-start lg:self-end">
+                    <span id="sourceBadge" tabindex="0" role="status" aria-describedby="sourceBadgeTip"
+                          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-sportBorder bg-sportCard text-xs font-bold uppercase tracking-wider text-gray-300">
+                        <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> Connecting…
+                    </span>
+                    <span id="sourceBadgeTip" role="tooltip" class="sl-tooltip-panel" style="left:auto;right:0;transform:none;">Checking whether the ScoreLine API is reachable…</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- WORKSPACE -->
+        <section class="pb-12" aria-label="Prediction workspace">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+                <!-- LEFT: controls -->
+                <div class="lg:col-span-5 space-y-6">
+                    <form id="predictForm" class="glass-panel p-6 sm:p-7 rounded-3xl border border-sportBorder" novalidate aria-labelledby="buildTitle">
+                        <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Step 1</span>
+                        <h2 id="buildTitle" class="text-2xl font-black text-white uppercase italic tracking-tight mt-1 mb-5">BUILD A MATCH</h2>
+
+                        <fieldset class="mb-5">
+                            <legend class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">League</legend>
+                            <div id="leagueGroup" class="grid grid-cols-3 gap-2" role="radiogroup">
+                                <div class="col-span-3 h-11 rounded-xl bg-sportCard animate-pulse" aria-hidden="true"></div>
+                            </div>
+                        </fieldset>
+
+                        <div class="space-y-3">
+                            <div>
+                                <label for="homeTeam" id="homeTeamLabel" class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                                    <i class="fa-solid fa-house text-activeRed mr-1" aria-hidden="true"></i> Home team
+                                </label>
+                                <div class="relative" data-combobox="home">
+                                    <input id="homeTeam" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="homeTeamList"
+                                           aria-describedby="homeTeamError" autocomplete="off" spellcheck="false" placeholder="Search home team…"
+                                           class="w-full bg-sportCard border border-sportBorder rounded-xl pl-4 pr-11 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-activeRed transition-colors">
+                                    <button type="button" tabindex="-1" aria-label="Show home teams" data-combo-toggle
+                                            class="absolute right-1 top-1/2 -translate-y-1/2 w-10 h-10 text-gray-400 hover:text-white"><i class="fa-solid fa-chevron-down text-xs" aria-hidden="true"></i></button>
+                                    <ul id="homeTeamList" role="listbox" aria-labelledby="homeTeamLabel" class="combo-list hidden"></ul>
+                                </div>
+                                <p id="homeTeamError" class="field-error text-xs mt-1.5 hidden"></p>
+                            </div>
+
+                            <div class="flex items-center gap-3" aria-hidden="false">
+                                <span class="flex-1 h-px bg-sportBorder"></span>
+                                <button type="button" id="swapBtn" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-sportBorder text-xs font-semibold text-gray-300 hover:text-white hover:border-activeRed transition-colors" aria-label="Swap home and away teams">
+                                    <i class="fa-solid fa-right-left rotate-90" aria-hidden="true"></i> Swap
+                                </button>
+                                <span class="flex-1 h-px bg-sportBorder"></span>
+                            </div>
+
+                            <div>
+                                <label for="awayTeam" id="awayTeamLabel" class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
+                                    <i class="fa-solid fa-plane text-activeRed mr-1" aria-hidden="true"></i> Away team
+                                </label>
+                                <div class="relative" data-combobox="away">
+                                    <input id="awayTeam" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="awayTeamList"
+                                           aria-describedby="awayTeamError" autocomplete="off" spellcheck="false" placeholder="Search away team…"
+                                           class="w-full bg-sportCard border border-sportBorder rounded-xl pl-4 pr-11 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-activeRed transition-colors">
+                                    <button type="button" tabindex="-1" aria-label="Show away teams" data-combo-toggle
+                                            class="absolute right-1 top-1/2 -translate-y-1/2 w-10 h-10 text-gray-400 hover:text-white"><i class="fa-solid fa-chevron-down text-xs" aria-hidden="true"></i></button>
+                                    <ul id="awayTeamList" role="listbox" aria-labelledby="awayTeamLabel" class="combo-list hidden"></ul>
+                                </div>
+                                <p id="awayTeamError" class="field-error text-xs mt-1.5 hidden"></p>
+                            </div>
+                        </div>
+
+                        <div class="mt-5">
+                            <div class="flex items-center gap-2 mb-2">
+                                <label for="modelSelect" class="text-xs font-bold text-gray-300 uppercase tracking-wider">Model</label>
+                                <span class="sl-tooltip">
+                                    <button type="button" class="w-6 h-6 inline-flex items-center justify-center rounded-full text-gray-400 hover:text-activeRed" aria-describedby="modelTip" aria-label="Why is Logistic Regression the default?">
+                                        <i class="fa-solid fa-circle-info" aria-hidden="true"></i>
+                                    </button>
+                                    <span id="modelTip" role="tooltip" class="sl-tooltip-panel">
+                                        <strong class="text-white">Why Logistic Regression by default?</strong><br>
+                                        On the 2025/26 final test (1,752 matches no model had seen) it had the lowest log loss (0.992) and the highest accuracy (52.2%) of all our models. The Elo&nbsp;+&nbsp;Poisson ensemble was a very close second and led on the 2024/25 validation season.
+                                    </span>
+                                </span>
+                            </div>
+                            <select id="modelSelect" class="sl-select w-full bg-sportCard border border-sportBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-activeRed"></select>
+                        </div>
+
+                        <p id="formError" class="field-error text-sm mt-4 hidden" role="alert"></p>
+
+                        <button type="submit" id="predictBtn" class="mt-6 w-full px-8 py-4 bg-ctaRed hover:bg-ctaRedHover disabled:opacity-60 disabled:cursor-wait text-white font-bold rounded-xl shadow-red-glow hover:shadow-red-glow-lg transition-all uppercase tracking-wider text-sm inline-flex items-center justify-center gap-2.5">
+                            <i class="fa-solid fa-bolt" aria-hidden="true"></i> <span>Predict</span>
+                        </button>
+                    </form>
+
+                    <!-- Fixture browser -->
+                    <section id="fixtures" class="glass-panel p-6 sm:p-7 rounded-3xl border border-sportBorder scroll-mt-24" aria-labelledby="fxTitle">
+                        <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Or</span>
+                        <h2 id="fxTitle" class="text-2xl font-black text-white uppercase italic tracking-tight mt-1 mb-4">BROWSE FIXTURES</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                            <div>
+                                <label for="fxSeason" class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Season</label>
+                                <select id="fxSeason" class="sl-select w-full bg-sportCard border border-sportBorder rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-activeRed"></select>
+                            </div>
+                            <div>
+                                <label for="fxLeague" class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">League</label>
+                                <select id="fxLeague" class="sl-select w-full bg-sportCard border border-sportBorder rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-activeRed">
+                                    <option value="">All leagues</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="fxDate" class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1">Date</label>
+                                <select id="fxDate" class="sl-select w-full bg-sportCard border border-sportBorder rounded-lg px-3 py-2.5 text-sm text-white focus:outline-none focus:border-activeRed">
+                                    <option value="">All dates</option>
+                                </select>
+                            </div>
+                        </div>
+                        <p id="fxCount" class="text-xs text-gray-400 mb-2" aria-live="polite"></p>
+                        <div id="fixtureList" class="space-y-4 max-h-[26rem] overflow-y-auto pr-1">
+                            <div class="h-14 rounded-xl bg-sportCard animate-pulse" aria-hidden="true"></div>
+                            <div class="h-14 rounded-xl bg-sportCard animate-pulse" aria-hidden="true"></div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- RIGHT: result -->
+                <div class="lg:col-span-7 lg:sticky lg:top-24">
+                    <div id="resultRegion" class="scroll-mt-24" aria-live="polite" aria-busy="false">
+                        <!-- Empty state -->
+                        <div id="stateEmpty" class="glass-panel rounded-3xl border border-dashed border-sportBorder p-10 sm:p-14 text-center">
+                            <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-activeRed/10 border border-activeRed/30 flex items-center justify-center text-activeRed text-2xl shadow-red-glow" aria-hidden="true">
+                                <i class="fa-solid fa-futbol"></i>
+                            </div>
+                            <h2 class="text-2xl font-black text-white uppercase italic tracking-tight mb-2">NO PREDICTION YET</h2>
+                            <p class="text-sm text-gray-400 max-w-md mx-auto">Pick a home and away team and press <strong class="text-white">Predict</strong>, or choose a fixture from the list. Probabilities, expected goals, likely scorelines and recent form will appear here.</p>
+                        </div>
+
+                        <!-- Loading state -->
+                        <div id="stateLoading" class="hidden glass-panel rounded-3xl border border-sportBorder p-14 text-center">
+                            <div class="sl-spinner mx-auto mb-5" aria-hidden="true"></div>
+                            <p class="text-sm font-semibold text-gray-200">Crunching the numbers…</p>
+                            <p class="text-xs text-gray-400 mt-1">Asking every model for its prediction.</p>
+                        </div>
+
+                        <!-- Error state -->
+                        <div id="stateError" class="hidden rounded-3xl bg-activeRed/10 border border-activeRed/40 p-8 sm:p-10 text-center" role="alert">
+                            <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-activeRed/20 flex items-center justify-center text-activeRed text-xl" aria-hidden="true">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </div>
+                            <h2 class="text-xl font-black text-white uppercase italic tracking-tight mb-2">PREDICTION UNAVAILABLE</h2>
+                            <p id="errorMessage" class="text-sm text-gray-200 max-w-md mx-auto mb-5">Something went wrong.</p>
+                            <button type="button" id="retryBtn" class="px-6 py-3 bg-ctaRed hover:bg-ctaRedHover text-white font-bold rounded-xl uppercase tracking-wider text-xs inline-flex items-center gap-2">
+                                <i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Try again
+                            </button>
+                        </div>
+
+                        <!-- Result card (rendered by js/predictor.js) -->
+                        <article id="resultCard" class="hidden glass-panel-active rounded-3xl p-6 sm:p-8" aria-labelledby="resultTitle"></article>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DETAILS -->
+        <section id="details" class="hidden pb-16" aria-label="Prediction details">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                <div class="glass-panel p-6 sm:p-7 rounded-3xl border border-sportBorder">
+                    <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Model comparison</span>
+                    <h2 class="text-xl font-bold text-white uppercase tracking-wider mt-1 mb-1">Every model, this fixture</h2>
+                    <p class="text-xs text-gray-400 mb-4">Select a model name to make it the headline prediction.</p>
+                    <div id="compareLegend" class="flex flex-wrap gap-4 text-xs text-gray-300 mb-3">
+                        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-outHome" aria-hidden="true"></span>Home</span>
+                        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-outDraw" aria-hidden="true"></span>Draw</span>
+                        <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-outAway" aria-hidden="true"></span>Away</span>
+                    </div>
+                    <div class="overflow-x-auto -mx-2 px-2">
+                        <table class="w-full text-sm tabular" id="compareTable">
+                            <caption class="sr-only-custom">Home, draw and away probabilities from each model for the selected fixture</caption>
+                            <thead>
+                                <tr class="text-[11px] uppercase tracking-wider text-gray-400 border-b border-sportBorder">
+                                    <th scope="col" class="text-left font-bold py-2 pr-2">Model</th>
+                                    <th scope="col" class="text-right font-bold py-2 px-2">Home</th>
+                                    <th scope="col" class="text-right font-bold py-2 px-2">Draw</th>
+                                    <th scope="col" class="text-right font-bold py-2 px-2">Away</th>
+                                    <th scope="col" class="font-bold py-2 pl-3 w-[30%] min-w-[6rem]"><span class="sr-only-custom">Distribution</span></th>
+                                </tr>
+                            </thead>
+                            <tbody id="compareBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-6 sm:p-7 rounded-3xl border border-sportBorder">
+                    <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Expected goals</span>
+                    <h2 class="text-xl font-bold text-white uppercase tracking-wider mt-1 mb-4">Likely scorelines</h2>
+                    <div id="goalsPanel"></div>
+                </div>
+
+                <div class="glass-panel p-6 sm:p-7 rounded-3xl border border-sportBorder lg:col-span-2">
+                    <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Recent form</span>
+                    <h2 class="text-xl font-bold text-white uppercase tracking-wider mt-1 mb-4">Last five &amp; head-to-head</h2>
+                    <div id="formPanel"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MODEL PERFORMANCE -->
+        <section id="analytics" class="py-16 bg-sportCard/30 border-t border-sportBorder/50 scroll-mt-20" aria-labelledby="perfTitle">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mb-8">
+                    <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Model transparency</span>
+                    <h2 id="perfTitle" class="text-3xl sm:text-5xl font-black text-white uppercase italic tracking-tight mt-1 mb-3">HOW GOOD ARE THE MODELS?</h2>
+                    <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                        Every model was scored on full seasons of matches it never saw during training, and compared against simple baselines and the bookmakers' own odds (with their profit margin removed).
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2 mb-5" role="tablist" aria-label="Evaluation season" id="perfTabs">
+                    <button type="button" role="tab" id="tab-test" aria-controls="perfPanel" aria-selected="true" data-set="test"
+                            class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border">Final test · 2025/26</button>
+                    <button type="button" role="tab" id="tab-validation" aria-controls="perfPanel" aria-selected="false" tabindex="-1" data-set="validation"
+                            class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border">Validation · 2024/25</button>
+                </div>
+
+                <div id="perfPanel" role="tabpanel" aria-labelledby="tab-test" class="grid grid-cols-1 xl:grid-cols-5 gap-6">
+                    <div class="xl:col-span-3 glass-panel rounded-3xl border border-sportBorder p-5 sm:p-6">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm tabular" id="perfTable">
+                                <caption id="perfCaption" class="text-left text-xs text-gray-400 pb-3"></caption>
+                                <thead>
+                                    <tr class="text-[11px] uppercase tracking-wider text-gray-400 border-b border-sportBorder">
+                                        <th scope="col" class="text-left font-bold py-2 pr-2">Model</th>
+                                        <th scope="col" class="text-right font-bold py-2 px-2">Log loss <span class="text-gray-500 normal-case" aria-label="lower is better">↓</span></th>
+                                        <th scope="col" class="text-right font-bold py-2 px-2">Brier <span class="text-gray-500 normal-case" aria-label="lower is better">↓</span></th>
+                                        <th scope="col" class="text-right font-bold py-2 px-2">RPS <span class="text-gray-500 normal-case" aria-label="lower is better">↓</span></th>
+                                        <th scope="col" class="text-right font-bold py-2 pl-2">Accuracy <span class="text-gray-500 normal-case" aria-label="higher is better">↑</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="perfBody">
+                                    <tr><td colspan="5" class="py-6 text-center text-gray-400"><span class="sl-spinner inline-block align-middle !w-6 !h-6 mr-2" aria-hidden="true"></span>Loading model performance…</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-[11px] text-gray-400 mt-3"><span class="text-activeRed font-bold">★</span> best of our models for that metric. Bookmakers and baselines are shown for comparison.</p>
+                    </div>
+
+                    <div class="xl:col-span-2 glass-panel rounded-3xl border border-sportBorder p-5 sm:p-6">
+                        <div class="flex items-center justify-between gap-3 mb-4">
+                            <h3 id="chartTitle" class="text-sm font-bold text-white uppercase tracking-wider">Accuracy</h3>
+                            <label for="chartMetric" class="sr-only-custom">Chart metric</label>
+                            <select id="chartMetric" class="sl-select bg-sportCard border border-sportBorder rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-activeRed">
+                                <option value="accuracy">Accuracy</option>
+                                <option value="log_loss">Log loss</option>
+                                <option value="brier">Brier score</option>
+                                <option value="rps">RPS</option>
+                            </select>
+                        </div>
+                        <div id="perfChart" class="min-h-[12rem]"></div>
+                        <p id="chartNote" class="text-[11px] text-gray-400 mt-3"></p>
+                    </div>
+                </div>
+
+                <!-- Metric explainers -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+                    <div class="glass-panel p-5 rounded-2xl border border-sportBorder">
+                        <h3 class="text-sm font-bold text-white uppercase tracking-wide mb-1">Log loss <span class="text-xs text-gray-400 normal-case font-semibold">· lower is better</span></h3>
+                        <p class="text-xs text-gray-300 leading-relaxed">Punishes a model for being confident and wrong. Saying 80% for a result that doesn't happen costs far more than saying 40%. Guessing ⅓ for everything scores about 1.10.</p>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl border border-sportBorder">
+                        <h3 class="text-sm font-bold text-white uppercase tracking-wide mb-1">Brier score <span class="text-xs text-gray-400 normal-case font-semibold">· lower is better</span></h3>
+                        <p class="text-xs text-gray-300 leading-relaxed">The average squared gap between the predicted probabilities and what actually happened (1 for the real result, 0 for the others). 0 would be perfect.</p>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl border border-sportBorder">
+                        <h3 class="text-sm font-bold text-white uppercase tracking-wide mb-1">RPS <span class="text-xs text-gray-400 normal-case font-semibold">· lower is better</span></h3>
+                        <p class="text-xs text-gray-300 leading-relaxed">Ranked Probability Score treats home → draw → away as an ordered scale, so predicting a draw when the home side wins is "less wrong" than predicting an away win.</p>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl border border-sportBorder">
+                        <h3 class="text-sm font-bold text-white uppercase tracking-wide mb-1">Accuracy <span class="text-xs text-gray-400 normal-case font-semibold">· higher is better</span></h3>
+                        <p class="text-xs text-gray-300 leading-relaxed">How often the most likely outcome was the actual result. Easy to read, but it ignores how confident the model was, so we rank models mainly by log loss.</p>
+                    </div>
+                </div>
+
+                <div id="perfTakeaway" class="mt-6 p-5 sm:p-6 rounded-2xl bg-sportCard border border-sportBorder text-sm text-gray-300 leading-relaxed"></div>
+            </div>
+        </section>
+
+        <!-- DISCLAIMER -->
+        <section class="py-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="p-6 sm:p-7 rounded-2xl bg-activeRed/10 border border-activeRed/40">
+                    <div class="flex items-center gap-2 text-activeRed font-bold text-xs sm:text-sm uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+                        <span>For insight, not betting advice</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">
+                        ScoreLine's probabilities are estimates built from historical data. They don't know about injuries, suspensions, transfers or late team news, and even a 60% favourite fails to win 4 times in 10. Use them to explore and understand matches, <strong class="text-white">not to place bets</strong>.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="site-footer"></div>
+    <div id="chartTip" class="chart-tip hidden" role="presentation"></div>
+
+    <script src="js/probability.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/predictor.js"></script>
+</body>
+</html>
