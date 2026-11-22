@@ -4,11 +4,16 @@ Full development test suite
 
 ## CI/CD
 
-<!-- To be completed by Mark. -->
+GitHub Actions runs on pushes and pull requests. It builds the backend Docker image and scans the repository for secrets; separate workflows run the backend, Django and ML tests when their files change. The image is built without being pushed to a registry.
 
 ## Unit Testing
 
-<!-- To be completed by Mark. -->
+Unit tests cover the backend API and services, Django pages and authentication. They check expected responses and validation, exercise authentication flows with the backend mocked, and cover data handling and model behaviour. Run the relevant suite from the repository root:
+
+```
+python -m pytest backend/tests
+cd Django && python manage.py test webplay
+```
 
 ## Acceptance Tests
 
