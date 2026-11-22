@@ -122,4 +122,4 @@ if __name__ == "__main__":
     main()
 
 # Claude was used to help set up this data pull procedure, as we were having problems, the basic model
-#  .... was borrowed from other pipelines Darragh has written in the past.Claude also offered some useful exception handling
+#  .... was borrowed from other pipelines  has written in the past.Claude also offered some useful exception handling
