@@ -1,4 +1,4 @@
-"""Stage 7b: match features computed strictly from PRIOR matches (no leakage).
+"""Stage 7(extended): match features computed strictly from PRIOR matches (no leakage).
 
 Every per-team statistic is shift(1)-ed before rolling, so match k only sees
 matches that kicked off before it. Build features on the full chronological
@@ -7,6 +7,7 @@ dataset *before* time_split so test matches can use training-period history.
 import numpy as np
 import pandas as pd
 
+# Some global variables initialing for feature engineering
 WINDOW = 5
 DEFAULT_REST_DAYS = 7.0  # used when a team has no previous match in the data
 H2H_NEUTRAL_PPG = 1.5  # midpoint of 0..3 points, used when teams haven't met
@@ -310,3 +311,5 @@ def feature_set(*groups: str, base=BASELINE, drop=(), replace_form: bool = False
 
 # Chosen by train-only time-ordered CV ablation (see eda.ipynb "Feature Ablation").
 SELECTED_FEATURES = ["elo_diff", "ewm_gd_diff", "dc_p_home", "dc_p_draw"]
+
+# Claude was used to brainstorm mew features based on the data available between the csv and api.

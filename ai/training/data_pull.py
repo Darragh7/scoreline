@@ -1,6 +1,6 @@
-"""Stage 2 (acquire): pull historical finished matches from football-data.org v4.
+"""As part of preprocessing: pull historical finished matches from football-data.org v4.
 
-Results are normalised to the same fields preprocessing.load_api_matches expects
+Results are normalised to the same form preprocessing.load_api_matches expects
 and cached per competition/season as CSV under ai/training/data/ (git-ignored via
 the root *.csv rule).
 
@@ -18,8 +18,8 @@ from .preprocessing import API_COLUMNS
 
 DEFAULT_BASE_URL = "https://api.football-data.org/v4"
 DATA_DIR = Path(__file__).parent / "data"
-# Free tier allows ~10 requests/minute, so leave >= 6s between calls.
-MIN_INTERVAL_SECONDS = 6.5
+# Free tier allows ~10 requests/minute, so we leave >= 6s between calls. (60 / 10)
+MIN_INTERVAL_SECONDS = 6.5 # ... bit more than six offers a buffer
 
 
 class DataPullError(Exception):
@@ -120,3 +120,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+# Claude was used to help set up this data pull procedure, as we were having problems, the basic model
+#  .... was borrowed from other pipelines Darragh has written in the past.Claude also offered some useful exception handling

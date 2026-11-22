@@ -1,9 +1,10 @@
-"""ScoreLine data preparation stages (2: acquire/parse, 3: inspect, 4: clean,
-5: group/time split, 7a: label). Stage 6 (explore) lives in notebooks only."""
+"""Data preparation stages (2: acquire/parse, 3: inspect, 4: clean,
+5: group/time split, 7a: label). Stage 6 (explore) exists in notebooks only."""
 import pandas as pd
 
 from .teams import COMPETITION_CODES, canonical_team
 
+#This is teh raw feature set we have chosen
 API_COLUMNS = ["id", "home_team", "away_team", "date", "status", "home_score", "away_score"]
 
 
@@ -12,6 +13,7 @@ def load_api_matches(matches: list[dict]) -> pd.DataFrame:
     return pd.DataFrame(matches, columns=API_COLUMNS)
 
 
+# Then implementing the later combined static features
 STATIC_REQUIRED = ["Div", "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG"]
 STATIC_COLUMNS = API_COLUMNS + ["competition", "season"]
 
