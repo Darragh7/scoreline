@@ -62,3 +62,6 @@ class ContextMoE(ClassifierMixin, BaseEstimator):
 
     def predict(self, X):
         return self.classes_[self.predict_proba(X).argmax(axis=1)]
+
+# Note that this MoE architecture is derived from a prticular architecture Darragh used in his 
+# BSc disseration, it is an interesting model in terms of prediction performance, and a good starting point.
