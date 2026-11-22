@@ -39,7 +39,7 @@ What we test and why:
 - **Evaluation helpers** (`test_evaluation.py`, `test_season_eval.py`): Ranked probability score is checked against known values, the bootstrap verdict ("better / tied / worse") is checked on data where the answer is known, and calibration tables are checked on forecasts that are calibrated by construction. The season runner is tested to train only on seasons before the one it evaluates, to leave out matches without bookmaker odds, and to refuse the held-out final-test season unless it is explicitly confirmed.
 - **Prediction** (`test_predict.py`): A saved model reloads and gives identical predictions, outputs are valid home_win / draw / away_win probabilities that sum to 1, and teams without history or stale history are flagged instead of failing. The key test checks there is no training/serving skew: a played match rebuilt as a fixture from the matches before it gets the same features as in training. Further tests check that features ignore results played after the fixture, and that fixtures never feed each other (same-week fixtures sharing a team are processed separately).
 
-- These model tests are automated from a ready to go suite, which means they are not written by Darragh or Sriram!
+- AI assistance was used to help write some of these tests.
 
 How models are evaluated, (not unit tested)
 
