@@ -14,6 +14,7 @@ from ai.training import teams
     (["M'gladbach", "Borussia Mönchengladbach"], "Borussia Monchengladbach"),
     (["Nott'm Forest", "Nottingham Forest FC"], "Nottingham Forest"),
     (["Wolves", "Wolverhampton Wanderers FC"], "Wolverhampton Wanderers"),
+    (["Strasbourg", "RC Strasbourg Alsace", "Racing Club de Strasbourg Alsace"], "Strasbourg"),
 ])
 def test_spellings_resolve_to_one_canonical_name(variants, canonical):
     assert {teams.canonical_team(v) for v in variants} == {canonical}

@@ -274,6 +274,7 @@ API_ALIASES = {
     "Stade Rennais FC 1901": "Rennes",
     "AS Saint-Étienne": "Saint-Etienne",
     "Racing Club de Strasbourg Alsace": "Strasbourg",
+    "RC Strasbourg Alsace": "Strasbourg",
     "Toulouse FC": "Toulouse",
     "ES Troyes AC": "Troyes",
 }
