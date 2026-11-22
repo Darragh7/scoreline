@@ -313,3 +313,4 @@ def feature_set(*groups: str, base=BASELINE, drop=(), replace_form: bool = False
 SELECTED_FEATURES = ["elo_diff", "ewm_gd_diff", "dc_p_home", "dc_p_draw"]
 
 # Claude was used to brainstorm mew features based on the data available between the csv and api.
+# Claude was also used to implement Dixon Coles

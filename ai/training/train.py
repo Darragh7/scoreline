@@ -136,3 +136,8 @@ def cv_ablation(X_all: pd.DataFrame, y: pd.Series, variants: dict, n_splits: int
         r.update(dict(zip(scores["model"], scores["mean_log_loss"])))
         rows.append(r)
     return pd.DataFrame(rows)
+
+
+# This is not the way I would generally design the training phase, but it is the best
+# method when multiple people are contributing the one Pipeline, according to Claude. 
+# Vectorised bootstrapping in particular was aided by the use of Claude
