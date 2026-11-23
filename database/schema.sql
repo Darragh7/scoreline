@@ -19,6 +19,9 @@ CREATE TABLE users (
 
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 
+-- The frontend reads data through the backend, so the public API gets no access.
+REVOKE ALL ON users FROM anon, authenticated;
+
 CREATE TABLE user_passwords (
     user_id INT PRIMARY KEY
         REFERENCES users(user_id) ON DELETE CASCADE,
