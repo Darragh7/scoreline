@@ -1,208 +1,393 @@
-{% extends "base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - ScoreLine</title>
+    <meta name="description" content="How ScoreLine estimates home win, draw and away win probabilities, what goes into the models, and how well they really perform.">
 
-{% block title %}About Us - ScoreLine{% endblock %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{% static 'js/tailwind-config.js' %}"></script>
 
-{% block content %}
-<!-- ABOUT HERO -->
-<section class="relative pt-14 pb-16 overflow-hidden">
-    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-activeRed/10 rounded-full blur-[140px] pointer-events-none"></div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body data-page="about" class="sport-grid min-h-screen flex flex-col antialiased selection:bg-activeRed selection:text-white">
+    <div id="site-header"></div>
+    <script src="{% static 'js/layout.js' %}"></script>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div class="max-w-3xl">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sportCard border border-activeRed/30 text-activeRed text-xs font-semibold uppercase tracking-widest mb-5 shadow-red-glow">
-                <i class="fa-solid fa-futbol"></i>
-                Match Outcome Intelligence
+    <main id="main" class="flex-1 w-full" tabindex="-1">
+        <!-- HERO -->
+        <section class="relative pt-14 pb-16 overflow-hidden">
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] max-w-full h-[550px] bg-activeRed/10 rounded-full blur-[140px] pointer-events-none" aria-hidden="true"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sportCard border border-activeRed/30 text-activeRed text-xs font-semibold uppercase tracking-widest mb-5 shadow-red-glow">
+                        <i class="fa-solid fa-futbol" aria-hidden="true"></i> Match Outcome Intelligence
+                    </div>
+                    <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white uppercase italic leading-none mb-5">
+                        ABOUT <span class="inline-block pr-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-red-200 to-activeRed">SCORELINE</span>
+                    </h1>
+                    <p class="text-base sm:text-lg text-gray-300 leading-relaxed">
+                        ScoreLine delivers <strong class="text-white">pre-match football predictions</strong>. For any fixture it estimates the chance of a <strong class="text-white">home win</strong>, a <strong class="text-white">draw</strong> or an <strong class="text-white">away win</strong>, and it is open about how good those estimates really are.
+                    </p>
+                </div>
+                <nav class="mt-8 flex flex-wrap gap-2" aria-label="On this page">
+                    <a href="#mission" class="px-3 py-1.5 rounded-full border border-sportBorder bg-sportCard text-xs font-semibold text-gray-300 hover:text-white hover:border-activeRed">Mission &amp; architecture</a>
+                    <a href="#probabilities" class="px-3 py-1.5 rounded-full border border-sportBorder bg-sportCard text-xs font-semibold text-gray-300 hover:text-white hover:border-activeRed">Outcome probabilities</a>
+                    <a href="#method" class="px-3 py-1.5 rounded-full border border-sportBorder bg-sportCard text-xs font-semibold text-gray-300 hover:text-white hover:border-activeRed">Inputs &amp; training</a>
+                    <a href="#validity" class="px-3 py-1.5 rounded-full border border-sportBorder bg-sportCard text-xs font-semibold text-gray-300 hover:text-white hover:border-activeRed">Validity &amp; caveats</a>
+                    <a href="#performance" class="px-3 py-1.5 rounded-full border border-sportBorder bg-sportCard text-xs font-semibold text-gray-300 hover:text-white hover:border-activeRed">Model performance</a>
+                </nav>
             </div>
+        </section>
 
-            <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white uppercase italic leading-none mb-5">
-                ABOUT <span class="inline-block pr-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-red-200 to-activeRed">SCORELINE</span>
-            </h1>
+        <!-- MISSION & ARCHITECTURE -->
+        <section id="mission" class="pb-16 scroll-mt-24" aria-labelledby="missionTitle">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                    <div class="lg:col-span-5 glass-panel p-7 sm:p-8 rounded-3xl border border-sportBorder flex flex-col">
+                        <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Our mission</span>
+                        <h2 id="missionTitle" class="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tight mt-1 mb-4">CLEAR, HONEST MATCH INSIGHT</h2>
+                        <p class="text-gray-300 text-sm leading-relaxed mb-4">
+                            We want anyone, whether a fan, a student or an analyst, to see what the data says about a match before kick-off, in plain numbers that are easy to read and easy to check.
+                        </p>
+                        <p class="text-gray-400 text-sm leading-relaxed">
+                            ScoreLine predicts <strong class="text-white">full-match results</strong>, not individual player stats. It covers Europe's top five leagues: the <strong class="text-white">Premier League</strong>, <strong class="text-white">La Liga</strong>, the <strong class="text-white">Bundesliga</strong>, <strong class="text-white">Serie A</strong> and <strong class="text-white">Ligue 1</strong>, using historical results in the widely used football-data.co.uk format.
+                        </p>
+                        <dl class="grid grid-cols-3 gap-3 mt-auto pt-6 border-t border-sportBorder/60 text-center">
+                            <div class="bg-sportCard p-3 rounded-xl border border-sportBorder flex flex-col-reverse">
+                                <dt class="text-[11px] text-gray-400 uppercase font-semibold">Leagues</dt>
+                                <dd class="text-2xl font-black text-white font-teko tracking-wider">5</dd>
+                            </div>
+                            <div class="bg-sportCard p-3 rounded-xl border border-sportBorder flex flex-col-reverse">
+                                <dt class="text-[11px] text-gray-400 uppercase font-semibold">Pre-kick-off</dt>
+                                <dd class="text-2xl font-black text-activeRed font-teko tracking-wider">100%</dd>
+                            </div>
+                            <div class="bg-sportCard p-3 rounded-xl border border-sportBorder flex flex-col-reverse">
+                                <dt class="text-[11px] text-gray-400 uppercase font-semibold">Outcomes</dt>
+                                <dd class="text-2xl font-black text-white font-teko tracking-wider">3-WAY</dd>
+                            </div>
+                        </dl>
+                    </div>
 
-            <p class="text-base sm:text-lg text-gray-300 leading-relaxed">
-                ScoreLine is a football match prediction platform built to forecast full-match outcomes—estimating the probability of a <strong class="text-white">home win</strong>, a <strong class="text-white">draw</strong>, or an <strong class="text-white">away win</strong>—rather than individual player stat lines.
-            </p>
-        </div>
-    </div>
-</section>
+                    <!-- Architecture diagram -->
+                    <div class="lg:col-span-7 glass-panel p-7 sm:p-8 rounded-3xl border border-sportBorder">
+                        <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Under the hood</span>
+                        <h2 class="text-2xl font-black text-white uppercase italic tracking-tight mt-1 mb-6">HOW THE PIECES FIT</h2>
 
-<!-- MISSION & ARCHITECTURE -->
-<section class="pb-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            <!-- Left: Mission & Scope -->
-            <div class="lg:col-span-7 glass-panel p-8 rounded-3xl border border-sportBorder flex flex-col justify-between">
+                        <ol class="flex flex-col md:flex-row items-stretch gap-3 md:gap-0" aria-label="Request flow from the website to the machine learning engine">
+                            <li class="flex-1 rounded-2xl bg-sportCard border border-sportBorder p-4">
+                                <div class="w-10 h-10 rounded-xl bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed mb-3" aria-hidden="true"><i class="fa-solid fa-display"></i></div>
+                                <h3 class="text-sm font-bold text-white uppercase tracking-wide">Frontend</h3>
+                                <p class="text-xs text-gray-400 mt-1 leading-relaxed">This website: HTML, Tailwind CSS &amp; JavaScript. You pick a match; it draws the charts.</p>
+                            </li>
+                            <li class="flex items-center justify-center text-activeRed md:px-2" aria-hidden="true">
+                                <i class="fa-solid fa-arrow-down md:hidden"></i><i class="fa-solid fa-arrow-right hidden md:inline"></i>
+                            </li>
+                            <li class="flex-1 rounded-2xl bg-sportCard border border-sportBorder p-4">
+                                <div class="w-10 h-10 rounded-xl bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed mb-3" aria-hidden="true"><i class="fa-brands fa-python"></i></div>
+                                <h3 class="text-sm font-bold text-white uppercase tracking-wide">Django API</h3>
+                                <p class="text-xs text-gray-400 mt-1 leading-relaxed">Python backend. Receives the request as JSON and returns probabilities, expected goals and form.</p>
+                            </li>
+                            <li class="flex items-center justify-center text-activeRed md:px-2" aria-hidden="true">
+                                <i class="fa-solid fa-arrow-down md:hidden"></i><i class="fa-solid fa-arrow-right hidden md:inline"></i>
+                            </li>
+                            <li class="flex-1 rounded-2xl bg-activeRed/10 border border-activeRed/40 p-4">
+                                <div class="w-10 h-10 rounded-xl bg-ctaRed flex items-center justify-center text-white mb-3 shadow-red-glow" aria-hidden="true"><i class="fa-solid fa-brain"></i></div>
+                                <h3 class="text-sm font-bold text-white uppercase tracking-wide">ML engine</h3>
+                                <p class="text-xs text-gray-300 mt-1 leading-relaxed">Elo, Poisson, logistic regression, random forest &amp; XGBoost models trained on historical results.</p>
+                            </li>
+                        </ol>
+                        <div class="mt-4 flex items-center gap-3 rounded-xl border border-dashed border-sportBorder p-3 text-xs text-gray-400">
+                            <i class="fa-solid fa-database text-activeRed" aria-hidden="true"></i>
+                            <span>Feeding it all: historical match results (scores, shots, corners) for every league and season, processed so each match only "knows" what happened before it.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- OUTCOME PROBABILITIES -->
+        <section id="probabilities" class="py-16 bg-sportCard/30 border-y border-sportBorder/50 scroll-mt-24" aria-labelledby="probTitle">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                 <div>
-                    <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Platform Scope</span>
-                    <h2 class="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tight mt-1 mb-4">
-                        BUILT FOR MATCH-LEVEL INSIGHT
-                    </h2>
-                    <p class="text-gray-300 text-sm leading-relaxed mb-4">
-                        ScoreLine evaluates historical Premier League match results to calculate clear pre-match outcome probabilities. Every prediction splits 100% across the three possible match results: <strong class="text-white">Home Win</strong>, <strong class="text-white">Draw</strong>, and <strong class="text-white">Away Win</strong>.
+                    <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Outcome probabilities</span>
+                    <h2 id="probTitle" class="text-3xl sm:text-5xl font-black text-white uppercase italic tracking-tight mt-1 mb-4">THREE NUMBERS, ALWAYS 100%</h2>
+                    <p class="text-gray-300 text-sm sm:text-base leading-relaxed mb-4">
+                        We evaluate thousands of past matches to learn how often each type of fixture ends in a home win, a draw or an away win. For a new match, every model splits 100% across those three outcomes, so the numbers are directly comparable and always add up.
                     </p>
                     <p class="text-gray-400 text-sm leading-relaxed">
-                        Rather than predicting individual player performance metrics like goals or assists, ScoreLine incorporates <strong class="text-white">overall player Elo ratings</strong> as an input signal alongside team strength and recent form to measure overall squad quality before kick-off.
+                        A probability isn't a promise. If ScoreLine says 53% for a home win, that means in a large set of similar matches the home side wins a little over half the time, and doesn't in the rest.
+                    </p>
+                </div>
+                <figure class="glass-panel-active rounded-3xl p-6 sm:p-8">
+                    <figcaption class="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-4">Real example · Premier League, 16 Aug 2024 · Logistic Regression</figcaption>
+                    <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3 mb-5">
+                        <span class="text-right text-xl sm:text-2xl font-black text-white uppercase italic">Man United</span>
+                        <span class="text-activeRed font-teko text-2xl">VS</span>
+                        <span class="text-xl sm:text-2xl font-black text-white uppercase italic">Fulham</span>
+                    </div>
+                    <div class="prob-bar mb-3" aria-hidden="true">
+                        <div class="seg-home" style="width:53%">53%</div>
+                        <div class="seg-draw" style="width:23%">23%</div>
+                        <div class="seg-away" style="width:24%">24%</div>
+                    </div>
+                    <p class="sr-only-custom">Home win 53 percent, draw 23 percent, away win 24 percent.</p>
+                    <div class="flex justify-between text-[11px] uppercase tracking-wider text-gray-300 font-semibold">
+                        <span><span class="inline-block w-2.5 h-2.5 rounded-sm bg-outHome mr-1" aria-hidden="true"></span>Home win</span>
+                        <span><span class="inline-block w-2.5 h-2.5 rounded-sm bg-outDraw mr-1" aria-hidden="true"></span>Draw</span>
+                        <span><span class="inline-block w-2.5 h-2.5 rounded-sm bg-outAway mr-1" aria-hidden="true"></span>Away win</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-5">53 + 23 + 24 = 100. <a href="predictor.html" class="text-activeRed font-semibold hover:underline">See the upcoming fixtures in the predictor →</a></p>
+                </figure>
+            </div>
+        </section>
+
+        <!-- MODEL INPUTS & TRAINING -->
+        <section id="method" class="py-16 scroll-mt-24" aria-labelledby="methodTitle">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mb-10">
+                    <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Model inputs &amp; training</span>
+                    <h2 id="methodTitle" class="text-3xl sm:text-5xl font-black text-white uppercase italic tracking-tight mt-1 mb-4">WHAT GOES INTO A PREDICTION</h2>
+                    <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                        Each model looks at the same kind of evidence, and only evidence that was available <em class="text-white not-italic font-semibold">before</em> kick-off. It never sees the result it's trying to predict.
                     </p>
                 </div>
 
-                <div class="grid grid-cols-3 gap-3 mt-8 pt-6 border-t border-sportBorder/60 text-center">
-                    <div class="bg-sportCard p-3 rounded-xl border border-sportBorder">
-                        <div class="text-xl font-black text-white font-['Teko'] tracking-wider">3 SEASONS</div>
-                        <div class="text-[11px] text-gray-400 uppercase font-semibold">Training Data</div>
-                    </div>
-                    <div class="bg-sportCard p-3 rounded-xl border border-sportBorder">
-                        <div class="text-xl font-black text-activeRed font-['Teko'] tracking-wider">100%</div>
-                        <div class="text-[11px] text-gray-400 uppercase font-semibold">Pre-Kickoff Inputs</div>
-                    </div>
-                    <div class="bg-sportCard p-3 rounded-xl border border-sportBorder">
-                        <div class="text-xl font-black text-white font-['Teko'] tracking-wider">3-WAY</div>
-                        <div class="text-[11px] text-gray-400 uppercase font-semibold">Win / Draw / Loss</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right: Technical Stack -->
-            <div class="lg:col-span-5 glass-panel p-8 rounded-3xl border border-sportBorder relative">
-                <div class="absolute -top-3 -right-3 w-11 h-11 bg-activeRed rounded-xl flex items-center justify-center text-white shadow-red-glow">
-                    <i class="fa-solid fa-layer-group"></i>
-                </div>
-                <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Under the Hood</span>
-                <h3 class="text-xl font-bold text-white uppercase tracking-wider mt-1 mb-6">ScoreLine Architecture</h3>
-
-                <div class="space-y-3.5 text-sm">
-                    <div class="p-3.5 bg-sportCard rounded-xl border border-sportBorder flex items-center justify-between">
-                        <span class="font-semibold text-white">Predictive Engine</span>
-                        <span class="text-xs text-activeRed font-bold uppercase">Supervised ML</span>
-                    </div>
-                    <div class="p-3.5 bg-sportCard rounded-xl border border-sportBorder flex items-center justify-between">
-                        <span class="font-semibold text-white">Squad Quality Input</span>
-                        <span class="text-xs text-activeRed font-bold uppercase">Overall Player Elo</span>
-                    </div>
-                    <div class="p-3.5 bg-sportCard rounded-xl border border-sportBorder flex items-center justify-between">
-                        <span class="font-semibold text-white">Web Framework</span>
-                        <span class="text-xs text-activeRed font-bold uppercase">Python & Django</span>
-                    </div>
-                    <div class="p-3.5 bg-sportCard rounded-xl border border-sportBorder flex items-center justify-between">
-                        <span class="font-semibold text-white">Interface & Charts</span>
-                        <span class="text-xs text-activeRed font-bold uppercase">Tailwind & JS</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- HOW PREDICTIONS ARE MADE -->
-<section class="py-16 bg-sportCard/30 border-t border-sportBorder/50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mb-12">
-            <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Model Transparency</span>
-            <h2 class="text-3xl sm:text-5xl font-black text-white uppercase italic tracking-tight mt-1 mb-4">
-                HOW ARE THESE PREDICTIONS MADE?
-            </h2>
-            <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
-                ScoreLine evaluates past Premier League results and works out how likely each outcome is: a <strong class="text-white">home win</strong>, a <strong class="text-white">draw</strong>, or an <strong class="text-white">away win</strong>. The three percentages always add up to 100%.
-            </p>
-        </div>
-
-        <!-- What is Captured in the Model -->
-        <div class="mb-10">
-            <h3 class="text-sm font-bold text-activeRed uppercase tracking-wider mb-5 flex items-center gap-2">
-                <i class="fa-solid fa-database"></i> What Is Captured in the Model
-            </h3>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Feature 1: Team Strength -->
-                <div class="glass-panel p-6 rounded-2xl border border-sportBorder">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-9 h-9 rounded-lg bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed">
-                            <i class="fa-solid fa-shield"></i>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div class="glass-panel p-6 rounded-2xl border border-sportBorder">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-lg bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed" aria-hidden="true"><i class="fa-solid fa-ranking-star"></i></div>
+                            <h3 class="text-base font-bold text-white uppercase tracking-wide">Team strength (Elo)</h3>
                         </div>
-                        <h4 class="text-base font-bold text-white uppercase tracking-wide">Team Strength Rating</h4>
+                        <p class="text-sm text-gray-300 leading-relaxed">Every team carries a rating that rises when it wins and falls when it loses. Beating a strong side earns more than beating a weak one. The bigger the gap between two teams, the more the stronger side is favoured, plus an allowance for home advantage.</p>
                     </div>
-                    <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
-                        Every team has a rating that goes up when it wins and down when it loses. Beating a strong team earns more than beating a weak one. The bigger the gap between the two teams, the more the model favours the stronger side.
-                    </p>
-                </div>
-
-                <!-- Feature 2: Overall Player Elo Rating -->
-                <div class="glass-panel p-6 rounded-2xl border border-sportBorder">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-9 h-9 rounded-lg bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed">
-                            <i class="fa-solid fa-ranking-star"></i>
+                    <div class="glass-panel p-6 rounded-2xl border border-sportBorder">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-lg bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed" aria-hidden="true"><i class="fa-solid fa-chart-line"></i></div>
+                            <h3 class="text-base font-bold text-white uppercase tracking-wide">Recent form</h3>
                         </div>
-                        <h4 class="text-base font-bold text-white uppercase tracking-wide">Overall Player Elo Rating</h4>
+                        <p class="text-sm text-gray-300 leading-relaxed">How many goals each team has been scoring and conceding in its last few games, with recent matches counting more than older ones, so current momentum shows up.</p>
                     </div>
-                    <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
-                        ScoreLine incorporates overall player Elo ratings as a model input to reflect underlying squad calibre. Rather than predicting individual player stats, these ratings help inform the overall match outcome forecast.
-                    </p>
-                </div>
-
-                <!-- Feature 3: Recent Form -->
-                <div class="glass-panel p-6 rounded-2xl border border-sportBorder">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-9 h-9 rounded-lg bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed">
-                            <i class="fa-solid fa-chart-line"></i>
+                    <div class="glass-panel p-6 rounded-2xl border border-sportBorder">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-lg bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed" aria-hidden="true"><i class="fa-solid fa-bullseye"></i></div>
+                            <h3 class="text-base font-bold text-white uppercase tracking-wide">Expected scorelines (Poisson)</h3>
                         </div>
-                        <h4 class="text-base font-bold text-white uppercase tracking-wide">Recent Form</h4>
+                        <p class="text-sm text-gray-300 leading-relaxed">A goals model estimates how many goals each side should score against this particular opponent (for example 1.64 vs 1.19), then works out how likely every exact scoreline, and so every result, is.</p>
                     </div>
-                    <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
-                        Tracks how many goals each team has been scoring and conceding in their last few games. Recent matches count more than older ones so current momentum is reflected accurately.
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="glass-panel p-6 sm:p-7 rounded-2xl border border-sportBorder">
+                        <h3 class="text-sm font-bold text-activeRed uppercase tracking-wider mb-3 flex items-center gap-2"><i class="fa-solid fa-gears" aria-hidden="true"></i> Supervised learning</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed mb-4">
+                            Three machine-learning models (<strong class="text-white">logistic regression</strong>, <strong class="text-white">random forest</strong> and <strong class="text-white">XGBoost</strong>) learn from labelled past matches how much each input matters. We also combine models: an <strong class="text-white">ensemble of Elo + Poisson</strong>, and an average of logistic regression and XGBoost.
+                        </p>
+                        <p class="text-sm text-gray-400 leading-relaxed">The <a href="predictor.html" class="text-activeRed font-semibold hover:underline">predictor</a> shows the final ensemble's probabilities for each scheduled fixture; the <a href="#performance" class="text-activeRed font-semibold hover:underline">full results</a> compare every model.</p>
+                    </div>
+
+                    <div class="glass-panel p-6 sm:p-7 rounded-2xl border border-sportBorder">
+                        <h3 class="text-sm font-bold text-activeRed uppercase tracking-wider mb-4 flex items-center gap-2"><i class="fa-solid fa-timeline" aria-hidden="true"></i> Train, validate, then test on unseen matches</h3>
+                        <ol class="space-y-3">
+                            <li class="flex gap-3">
+                                <span class="shrink-0 w-8 h-8 rounded-full bg-sportCard border border-sportBorder flex items-center justify-center text-xs font-black text-white">1</span>
+                                <div><p class="text-sm font-bold text-white">Train · seasons up to 2023/24</p><p class="text-xs text-gray-400">10,781 matches the models learn from.</p></div>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="shrink-0 w-8 h-8 rounded-full bg-sportCard border border-sportBorder flex items-center justify-center text-xs font-black text-white">2</span>
+                                <div><p class="text-sm font-bold text-white">Validate · 2024/25</p><p class="text-xs text-gray-400">1,752 matches used to compare models and tune them.</p></div>
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="shrink-0 w-8 h-8 rounded-full bg-ctaRed flex items-center justify-center text-xs font-black text-white">3</span>
+                                <div><p class="text-sm font-bold text-white">Final test · 2025/26</p><p class="text-xs text-gray-400">1,752 matches kept completely hidden until the very end, the fairest check of real-world performance.</p></div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VALIDITY & CAVEATS -->
+        <section id="validity" class="py-16 bg-sportCard/30 border-t border-sportBorder/50 scroll-mt-24" aria-labelledby="validityTitle">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-3xl mb-10">
+                    <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Validity &amp; caveats</span>
+                    <h2 id="validityTitle" class="text-3xl sm:text-5xl font-black text-white uppercase italic tracking-tight mt-1 mb-4">HOW GOOD IS IT, REALLY?</h2>
+                    <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                        Better than guessing, close to the bookmakers, and far from perfect. Football is a low-scoring, high-randomness sport, and the honest numbers reflect that.
                     </p>
                 </div>
 
-                <!-- Feature 4: Expected Scorelines -->
-                <div class="glass-panel p-6 rounded-2xl border border-sportBorder">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-9 h-9 rounded-lg bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed">
-                            <i class="fa-solid fa-bullseye"></i>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <figure class="glass-panel p-6 sm:p-7 rounded-2xl border border-sportBorder">
+                        <figcaption class="text-sm font-bold text-white uppercase tracking-wider mb-1">How often the most likely result happened</figcaption>
+                        <p class="text-xs text-gray-400 mb-5">Accuracy on the 2024/25 validation season (1,752 matches)</p>
+                        <div class="space-y-3" role="list">
+                            <div role="listitem" class="grid grid-cols-[8.5rem_1fr_3rem] sm:grid-cols-[10rem_1fr_3rem] items-center gap-3">
+                                <span class="text-xs text-gray-300">Bookmakers</span>
+                                <span class="h-3.5"><span class="block h-full rounded-r" style="width:91.2%;background:#7dd3fc"></span></span>
+                                <span class="text-xs text-white font-bold text-right tabular">54.7%</span>
+                            </div>
+                            <div role="listitem" class="grid grid-cols-[8.5rem_1fr_3rem] sm:grid-cols-[10rem_1fr_3rem] items-center gap-3">
+                                <span class="text-xs text-gray-300">Our best model</span>
+                                <span class="h-3.5"><span class="block h-full rounded-r bg-activeRed" style="width:90%"></span></span>
+                                <span class="text-xs text-white font-bold text-right tabular">54.0%</span>
+                            </div>
+                            <div role="listitem" class="grid grid-cols-[8.5rem_1fr_3rem] sm:grid-cols-[10rem_1fr_3rem] items-center gap-3">
+                                <span class="text-xs text-gray-300">Our weakest model</span>
+                                <span class="h-3.5"><span class="block h-full rounded-r" style="width:87.8%;background:#ff5c7a"></span></span>
+                                <span class="text-xs text-white font-bold text-right tabular">52.7%</span>
+                            </div>
+                            <div role="listitem" class="grid grid-cols-[8.5rem_1fr_3rem] sm:grid-cols-[10rem_1fr_3rem] items-center gap-3">
+                                <span class="text-xs text-gray-300">"Always home win"</span>
+                                <span class="h-3.5"><span class="block h-full rounded-r bg-gray-500" style="width:70%"></span></span>
+                                <span class="text-xs text-white font-bold text-right tabular">42.0%</span>
+                            </div>
+                            <div class="grid grid-cols-[8.5rem_1fr_3rem] sm:grid-cols-[10rem_1fr_3rem] gap-3" aria-hidden="true">
+                                <span></span><span class="flex justify-between text-[10px] text-gray-500 border-t border-sportBorder pt-1"><span>0%</span><span>30%</span><span>60%</span></span><span></span>
+                            </div>
                         </div>
-                        <h4 class="text-base font-bold text-white uppercase tracking-wide">Expected Scorelines</h4>
+                        <p class="text-xs text-gray-400 mt-4">On the unseen 2025/26 test season our models scored 51–52%, against 53.4% for the bookmakers.</p>
+                    </figure>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="glass-panel p-5 rounded-2xl border border-sportBorder">
+                            <div class="font-teko text-5xl text-white leading-none">+10–12<span class="text-2xl text-gray-400"> pts</span></div>
+                            <p class="text-xs text-gray-300 mt-2 leading-relaxed">Accuracy gain over always backing the home side (about 52–54% vs 42%).</p>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl border border-sportBorder">
+                            <div class="font-teko text-5xl text-white leading-none">0.98<span class="text-2xl text-gray-400"> vs 1.08</span></div>
+                            <p class="text-xs text-gray-300 mt-2 leading-relaxed">Log loss (lower is better) of our best model vs just using historical result frequencies.</p>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl border border-sportBorder">
+                            <div class="font-teko text-5xl text-white leading-none">0.99<span class="text-2xl text-gray-400"> vs 0.98</span></div>
+                            <p class="text-xs text-gray-300 mt-2 leading-relaxed">Our best model vs the bookmakers on the 2025/26 test. Close, but the market is still ahead.</p>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl border border-sportBorder">
+                            <div class="font-teko text-5xl text-white leading-none">~1 in 4</div>
+                            <p class="text-xs text-gray-300 mt-2 leading-relaxed">Roughly how often top-flight matches end level, yet draws are almost never the single most likely outcome.</p>
+                        </div>
                     </div>
-                    <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
-                        A goals model estimates how many goals each team is likely to score against this particular opponent, then works out how often the match would end in a home win, draw, or away win.
+                </div>
+
+                <!-- MODEL PERFORMANCE (moved here from the predictor page) -->
+                <div id="performance" class="mb-12 scroll-mt-24" aria-labelledby="perfTitle">
+                    <div class="max-w-3xl mb-6">
+                        <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Model transparency</span>
+                        <h3 id="perfTitle" class="text-2xl sm:text-4xl font-black text-white uppercase italic tracking-tight mt-1 mb-3">HOW GOOD ARE THE MODELS?</h3>
+                        <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                            Every model was scored on full seasons of matches it never saw during training, and compared against simple baselines and the bookmakers' own odds (with their profit margin removed). The predictor shows the <strong class="text-white">ensemble (Elo + Poisson)</strong>, marked <em class="not-italic text-activeRed font-semibold">Live model</em> below.
+                        </p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2 mb-5" role="tablist" aria-label="Evaluation season" id="perfTabs">
+                        <button type="button" role="tab" id="tab-test" aria-controls="perfPanel" aria-selected="true" data-set="test"
+                                class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border">Final test · 2025/26</button>
+                        <button type="button" role="tab" id="tab-validation" aria-controls="perfPanel" aria-selected="false" tabindex="-1" data-set="validation"
+                                class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider border">Validation · 2024/25</button>
+                    </div>
+
+                    <div id="perfPanel" role="tabpanel" aria-labelledby="tab-test" class="grid grid-cols-1 xl:grid-cols-5 gap-6">
+                        <div class="xl:col-span-3 glass-panel rounded-3xl border border-sportBorder p-5 sm:p-6">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm tabular">
+                                    <caption id="perfCaption" class="text-left text-xs text-gray-400 pb-3"></caption>
+                                    <thead>
+                                        <tr class="text-[11px] uppercase tracking-wider text-gray-400 border-b border-sportBorder">
+                                            <th scope="col" class="text-left font-bold py-2 pr-2">Model</th>
+                                            <th scope="col" class="text-right font-bold py-2 px-2">Log loss <span class="text-gray-500 normal-case" aria-label="lower is better">↓</span></th>
+                                            <th scope="col" class="text-right font-bold py-2 px-2">Brier <span class="text-gray-500 normal-case" aria-label="lower is better">↓</span></th>
+                                            <th scope="col" class="text-right font-bold py-2 px-2">RPS <span class="text-gray-500 normal-case" aria-label="lower is better">↓</span></th>
+                                            <th scope="col" class="text-right font-bold py-2 pl-2">Accuracy <span class="text-gray-500 normal-case" aria-label="higher is better">↑</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="perfBody"></tbody>
+                                </table>
+                            </div>
+                            <p class="text-[11px] text-gray-400 mt-3"><span class="text-activeRed font-bold">★</span> best of our models for that metric. Bookmakers and baselines are shown for comparison.</p>
+                        </div>
+
+                        <div class="xl:col-span-2 glass-panel rounded-3xl border border-sportBorder p-5 sm:p-6">
+                            <div class="flex items-center justify-between gap-3 mb-4">
+                                <h4 id="chartTitle" class="text-sm font-bold text-white uppercase tracking-wider">Accuracy</h4>
+                                <label for="chartMetric" class="sr-only-custom">Chart metric</label>
+                                <select id="chartMetric" class="sl-select bg-sportCard border border-sportBorder rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-activeRed">
+                                    <option value="accuracy">Accuracy</option>
+                                    <option value="log_loss">Log loss</option>
+                                    <option value="brier">Brier score</option>
+                                    <option value="rps">RPS</option>
+                                </select>
+                            </div>
+                            <div id="perfChart" class="min-h-[12rem]"></div>
+                            <p id="chartNote" class="text-[11px] text-gray-400 mt-3"></p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+                        <div class="glass-panel p-5 rounded-2xl border border-sportBorder">
+                            <h4 class="text-sm font-bold text-white uppercase tracking-wide mb-1">Log loss <span class="text-xs text-gray-400 normal-case font-semibold">· lower is better</span></h4>
+                            <p class="text-xs text-gray-300 leading-relaxed">Punishes a model for being confident and wrong. Saying 80% for a result that doesn't happen costs far more than saying 40%. Guessing ⅓ for everything scores about 1.10.</p>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl border border-sportBorder">
+                            <h4 class="text-sm font-bold text-white uppercase tracking-wide mb-1">Brier score <span class="text-xs text-gray-400 normal-case font-semibold">· lower is better</span></h4>
+                            <p class="text-xs text-gray-300 leading-relaxed">The average squared gap between the predicted probabilities and what actually happened (1 for the real result, 0 for the others). 0 would be perfect.</p>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl border border-sportBorder">
+                            <h4 class="text-sm font-bold text-white uppercase tracking-wide mb-1">RPS <span class="text-xs text-gray-400 normal-case font-semibold">· lower is better</span></h4>
+                            <p class="text-xs text-gray-300 leading-relaxed">Ranked Probability Score treats home → draw → away as an ordered scale, so predicting a draw when the home side wins is "less wrong" than predicting an away win.</p>
+                        </div>
+                        <div class="glass-panel p-5 rounded-2xl border border-sportBorder">
+                            <h4 class="text-sm font-bold text-white uppercase tracking-wide mb-1">Accuracy <span class="text-xs text-gray-400 normal-case font-semibold">· higher is better</span></h4>
+                            <p class="text-xs text-gray-300 leading-relaxed">How often the most likely outcome was the actual result. Easy to read, but it ignores how confident the model was, so we rank models mainly by log loss.</p>
+                        </div>
+                    </div>
+
+                    <div id="perfTakeaway" class="mt-6 p-5 sm:p-6 rounded-2xl bg-sportCard border border-sportBorder text-sm text-gray-300 leading-relaxed"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <div class="glass-panel p-6 rounded-2xl border border-sportBorder">
+                        <h3 class="text-sm font-bold text-white uppercase tracking-wide mb-2 flex items-center gap-2"><i class="fa-solid fa-dice text-activeRed" aria-hidden="true"></i> Football is unpredictable</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">One deflection or red card can flip a result. A 60% favourite still fails to win about 4 times in 10, so being "wrong" on a single match is expected.</p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl border border-sportBorder">
+                        <h3 class="text-sm font-bold text-white uppercase tracking-wide mb-2 flex items-center gap-2"><i class="fa-solid fa-equals text-activeRed" aria-hidden="true"></i> Draws are hardest</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">In our model output, draw probabilities mostly sit between 15% and 33%, so the models rarely pick a draw outright even though roughly a quarter of top-flight matches end level.</p>
+                    </div>
+                    <div class="glass-panel p-6 rounded-2xl border border-sportBorder">
+                        <h3 class="text-sm font-bold text-white uppercase tracking-wide mb-2 flex items-center gap-2"><i class="fa-solid fa-user-injured text-activeRed" aria-hidden="true"></i> What the models can't see</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">Injuries, suspensions, transfers, rotation, managerial changes and late team news are not inputs. Bookmakers do see these, which is part of why they stay ahead.</p>
+                    </div>
+                </div>
+
+                <div class="p-6 sm:p-7 rounded-2xl bg-activeRed/10 border border-activeRed/40">
+                    <div class="flex items-center gap-2 text-activeRed font-bold text-xs sm:text-sm uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i><span>Keep in mind</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">
+                        ScoreLine predictions are provided for analytical insight and learning, <strong class="text-white">not betting advice</strong>. Our models do not beat the bookmakers, and no model can remove the randomness of the sport.
                     </p>
                 </div>
-            </div>
-        </div>
 
-        <!-- How It Turns Information Into a Prediction & Validity -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-            <div class="glass-panel p-7 rounded-2xl border border-sportBorder">
-                <h3 class="text-sm font-bold text-activeRed uppercase tracking-wider mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-gears"></i> Turning Information Into a Prediction
-                </h3>
-                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
-                    ScoreLine has learned from three seasons of real results how much each of these features matters. It learns weights during supervised learning and adds them up for each match, giving a probability for each outcome. It only ever uses information from <em class="text-white font-semibold">before</em> kick-off, so it never cheats by looking at the actual relevant result.
-                </p>
+                <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="predictor.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-ctaRed hover:bg-ctaRedHover text-white font-bold rounded-xl shadow-red-glow hover:shadow-red-glow-lg transition-all uppercase tracking-wider text-xs sm:text-sm">
+                        <i class="fa-solid fa-play" aria-hidden="true"></i> Try the Match Predictor
+                    </a>
+                    <a href="#performance" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-sportCard hover:bg-sportBorder text-white font-bold rounded-xl border border-sportBorder transition-all uppercase tracking-wider text-xs sm:text-sm">
+                        <i class="fa-solid fa-table" aria-hidden="true"></i> See full model results
+                    </a>
+                </div>
             </div>
+        </section>
+    </main>
 
-            <div class="glass-panel p-7 rounded-2xl border border-sportBorder">
-                <h3 class="text-sm font-bold text-activeRed uppercase tracking-wider mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-check-double"></i> Performance Validity
-                </h3>
-                <p class="text-xs sm:text-sm text-gray-300 leading-relaxed">
-                    The model was trained on older matches and tested on later matches it had never seen. It beats simply guessing the most common result, and its probabilities align well with how often results actually occur across real Premier League fixtures.
-                </p>
-            </div>
-        </div>
-
-        <!-- Keep in Mind Disclaimer -->
-        <div class="p-6 sm:p-7 rounded-2xl bg-activeRed/10 border border-activeRed/40">
-            <div class="flex items-center gap-2 text-activeRed font-bold text-xs sm:text-sm uppercase tracking-wider mb-2">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                <span>Keep in Mind</span>
-            </div>
-            <p class="text-xs sm:text-sm text-gray-200 leading-relaxed">
-                Football is unpredictable. The data tells us draws are especially hard to call, and things like injuries, transfers, or late team news aren't included. A 60% chance of a home win still means the away side avoids defeat about 4 times in 10. ScoreLine predictions are provided for analytical insight, <strong class="text-white">not betting advice</strong>.
-            </p>
-        </div>
-
-        <!-- CTA to Predictor -->
-        <div class="mt-10 text-center">
-            <a href="{% url 'predictor' %}" class="inline-flex items-center gap-3 px-8 py-4 bg-activeRed hover:bg-red-600 text-white font-bold rounded-xl shadow-red-glow hover:shadow-red-glow-lg transition-all uppercase tracking-wider text-xs sm:text-sm">
-                <i class="fa-solid fa-play"></i> Try ScoreLine Match Predictor
-            </a>
-        </div>
-    </div>
-</section>
-{% endblock %}
+    <div id="site-footer"></div>
+    <script src="{% static 'js/model-performance.js' %}"></script>
+</body>
+</html>

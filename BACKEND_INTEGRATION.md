@@ -1,6 +1,11 @@
 # Backend integration: ScoreLine frontend ↔ API
 
-Status: **the frontend is not connected to a live backend yet.** It runs fully on demo data (`data/mock/`) and switches to the real API automatically once the endpoints below exist.
+> **Update (Nov 2026): the predictor page now reads `predictions.json` only.**
+> It loads the agreed file format (`docs/prediction_format.md`) from `PREDICTIONS_ENDPOINT` when that is set in `js/api.js`, otherwise from `data/predictions.json`. A backend endpoint only needs to return that same JSON document (or just its `predictions` list), for example `GET /api/predictions/`.
+> **"Pick two teams"** uses `ScoreLineAPI.getMatchupPrediction(competition, home, away)` in `js/api.js`. Today it only finds fixtures that are already in `predictions.json` (or the reversed fixture) and never estimates numbers. Predicting **any** two teams needs a new endpoint, for example `GET /predictions/matchup?competition=PL&home=Liverpool&away=Arsenal`, that runs the ensemble from `ai/training/predict.py` on request with the latest ratings/form and returns the same fields as a `predictions.json` entry (`home_win`, `draw`, `away_win`, `flags`, `model_version`). It isn't built yet; once it is, call it from the `'none'` branch of `getMatchupPrediction`.
+> The demo data in `data/mock/` has been removed, and the frontend **no longer calls** `/api/leagues/`, `/api/teams/`, `/api/fixtures/`, `/api/predict/`, `/api/form/` or `/api/model-performance/`. The sections below describing those endpoints are kept for history only. The model performance numbers now live in `js/model-performance.js` (shown on `about.html#performance`). `/api/contact/` and `/api/csrf/` are still used by the contact form.
+
+Status: **the frontend is not connected to a live backend yet.**
 
 ---
 

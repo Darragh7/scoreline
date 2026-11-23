@@ -22,8 +22,8 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "ScoreLine: Chrome, predictor in mock mode",
-            "url": "http://localhost:5500/predictor.html?mode=mock",
+            "name": "ScoreLine: Chrome, open the predictor",
+            "url": "http://localhost:5500/predictor.html",
             "webRoot": "${workspaceFolder}",
             "preLaunchTask": "Serve ScoreLine (port 5500)"
         }

@@ -1,409 +1,144 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SCORELINE - Pitch Analytics</title>
-    
-    <!-- Tailwind CSS -->
+    <title>ScoreLine - Pitch Analytics</title>
+    <meta name="description" content="ScoreLine forecasts home win, draw and away win probabilities for football matches before kick-off.">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        sportDark: '#0b0c10',
-                        sportCard: '#16181d',
-                        sportBorder: '#262930',
-                        activeRed: '#ff1744',
-                        glowRed: '#ff2a2a',
-                        darkRed: '#800a20',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        display: ['Impact', 'Teko', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        'red-glow': '0 0 25px -5px rgba(255, 23, 68, 0.5)',
-                        'red-glow-lg': '0 0 40px 2px rgba(255, 23, 68, 0.6)',
-                        'card-glow': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <!-- Google Fonts -->
+    <script src="{% static 'js/tailwind-config.js' %}"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Teko:wght@600;700&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <style>
-        body {
-            background-color: #0b0c10;
-            color: #ffffff;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        .text-glow {
-            text-shadow: 0 0 15px rgba(255, 23, 68, 0.7);
-        }
-
-        .sport-grid {
-            background-image: radial-gradient(rgba(255, 23, 68, 0.15) 1px, transparent 0);
-            background-size: 30px 30px;
-            background-position: -19px -19px;
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0b0c10;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #ff1744;
-            border-radius: 4px;
-        }
-
-        .glass-panel {
-            background: rgba(22, 24, 29, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .glass-panel-active {
-            background: rgba(22, 24, 29, 0.95);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 23, 68, 0.4);
-            box-shadow: 0 0 20px rgba(255, 23, 68, 0.25);
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.05); }
-        }
-
-        .pulse-active {
-            animation: pulseGlow 2s infinite ease-in-out;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
-<body class="sport-grid antialiased selection:bg-activeRed selection:text-white">
+<body data-page="home" class="sport-grid min-h-screen flex flex-col antialiased selection:bg-activeRed selection:text-white">
+    <div id="site-header"></div>
+    <script src="{% static 'js/layout.js' %}"></script>
 
-    <!-- HEADER & NAVIGATION (Links to separate HTML pages) -->
-<header class="sticky top-0 z-50 glass-panel border-b border-sportBorder/60">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+    <main id="main" class="flex-1 w-full" tabindex="-1">
+        <!-- HERO SECTION -->
+        <section class="relative pt-16 pb-24 lg:pt-24 lg:pb-32 overflow-hidden">
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] max-w-full h-[600px] bg-activeRed/10 rounded-full blur-[140px] pointer-events-none" aria-hidden="true"></div>
+            <div class="absolute top-1/3 right-10 w-[300px] h-[300px] bg-glowRed/10 rounded-full blur-[100px] pointer-events-none" aria-hidden="true"></div>
 
-    <!-- Brand Logo -->
-    <a href="index.html" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 bg-activeRed rounded-lg flex items-center justify-center transform -skew-x-12 group-hover:scale-105 transition-all shadow-red-glow">
-            <i class="fa-solid fa-bolt text-white text-xl transform skew-x-12"></i>
-        </div>
-        <div class="flex flex-col">
-            <span class="font-extrabold text-2xl tracking-wider text-white uppercase font-['Teko'] leading-none">
-                SCORE<span class="text-activeRed">LINE</span>
-            </span>
-            <span class="text-[10px] tracking-widest text-gray-400 uppercase font-semibold">Pitch Analytics</span>
-        </div>
-    </a>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sportCard border border-activeRed/30 text-activeRed text-xs font-semibold uppercase tracking-widest mb-6 shadow-red-glow">
+                        <span class="w-2 h-2 rounded-full bg-activeRed pulse-active" aria-hidden="true"></span>
+                        Next-Gen Football Match Predictive Intelligence
+                    </div>
 
-    <!-- Navigation Links -->
-    <nav class="hidden md:flex items-center gap-8">
-        <a href="{% url 'home' %}" class="text-sm font-medium text-activeRed transition-colors">Home</a> 
-        <!-- Predictor Dropdown -->
-                <div class="relative group">
-                    <button type="button" class="inline-flex items-center gap-1.5 text-sm font-medium text-gray-300 hover:text-activeRed transition-colors py-2">
-                        <a href="{% url 'predictor' %}"><span>Predictor</span></a>
-                        <i class="fa-solid fa-chevron-down text-[10px] transition-transform duration-200 group-hover:rotate-180"></i>
-                    </button>
+                    <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white uppercase italic leading-none mb-6">
+                        PREDICT <span class="inline-block pr-3 text-transparent bg-clip-text bg-gradient-to-r from-white via-red-200 to-activeRed">MATCH</span> OUTCOMES
+                    </h1>
 
-                    <!-- Dropdown Menu -->
-                    <div class="invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 transition-all duration-150 absolute left-0 top-full pt-2 w-56 z-50">
-                        <div class="glass-panel rounded-xl border border-sportBorder shadow-red-glow py-2 overflow-hidden">
-                            <a href="{% url 'predictor' %}" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-200 hover:bg-sportCard hover:text-activeRed transition-colors">
-                                <i class="fa-solid fa-bolt text-activeRed w-4"></i>
-                                <span>Live Predictor</span>
-                            </a>
-                            <a href="{% url 'predictor' %}" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-200 hover:bg-sportCard hover:text-activeRed transition-colors">
-                                <i class="fa-solid fa-chart-line text-activeRed w-4"></i>
-                                <span>Analytics & Trends</span>
-                            </a>
+                    <p class="text-lg sm:text-xl text-gray-400 font-normal leading-relaxed mb-8">
+                        ScoreLine evaluates historical match data, Elo team-strength ratings, recent form and expected scorelines to forecast home win, draw and away win probabilities before kick-off.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <a href="predictor.html" class="w-full sm:w-auto px-8 py-4 bg-ctaRed hover:bg-ctaRedHover text-white font-bold rounded-lg shadow-red-glow hover:shadow-red-glow-lg transition-all transform hover:-translate-y-1 uppercase tracking-wider text-sm flex items-center justify-center gap-3">
+                            <i class="fa-solid fa-play" aria-hidden="true"></i> Launch Interactive Predictor
+                        </a>
+                        <button type="button" data-open-modal="registerModal" class="w-full sm:w-auto px-8 py-4 bg-sportCard hover:bg-sportBorder text-gray-200 hover:text-white border border-sportBorder font-semibold rounded-lg transition-all text-sm uppercase tracking-wider flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-user-plus text-activeRed" aria-hidden="true"></i> Create Free Account
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Key Metric Highlights Banner -->
+                <ul class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-5xl mx-auto">
+                    <li class="glass-panel p-5 rounded-xl text-center border-l-4 border-l-activeRed">
+                        <div class="text-3xl lg:text-4xl font-extrabold text-white font-teko tracking-wider">10,000+</div>
+                        <div class="text-xs text-gray-400 uppercase font-semibold mt-1">Historical Matches</div>
+                    </li>
+                    <li class="glass-panel p-5 rounded-xl text-center border-l-4 border-l-activeRed">
+                        <div class="text-3xl lg:text-4xl font-extrabold text-white font-teko tracking-wider">6 Models</div>
+                        <div class="text-xs text-gray-400 uppercase font-semibold mt-1">Tested on Unseen Seasons</div>
+                    </li>
+                    <li class="glass-panel p-5 rounded-xl text-center border-l-4 border-l-activeRed">
+                        <div class="text-3xl lg:text-4xl font-extrabold text-white font-teko tracking-wider">5 Leagues</div>
+                        <div class="text-xs text-gray-400 uppercase font-semibold mt-1">Premier League · La Liga · Bundesliga · Serie A · Ligue 1</div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- KEY FEATURES SECTION -->
+        <section id="features" class="py-20 bg-sportCard/30 border-y border-sportBorder/50" aria-labelledby="featuresTitle">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Platform Capabilities</span>
+                    <h2 id="featuresTitle" class="text-3xl sm:text-5xl font-black text-white uppercase italic tracking-tight mt-1">
+                        KEY FEATURES &amp; HIGHLIGHTS
+                    </h2>
+                    <p class="text-gray-400 text-sm mt-3">
+                        Discover what makes our machine learning platform a sharp tool for football data analytics.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glass-panel p-8 rounded-2xl hover:border-activeRed/50 transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-activeRed/10 border border-activeRed/30 flex items-center justify-center text-activeRed text-xl mb-6 group-hover:scale-110 transition-transform shadow-red-glow" aria-hidden="true">
+                            <i class="fa-solid fa-sliders"></i>
                         </div>
+                        <h3 class="text-xl font-bold text-white uppercase tracking-wider mb-3">Match Outcome Probabilities</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                            Forecast home win, draw, and away win odds that sum to 100%, built around full-match results rather than individual player stat projections.
+                        </p>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-2xl hover:border-activeRed/50 transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-activeRed/10 border border-activeRed/30 flex items-center justify-center text-activeRed text-xl mb-6 group-hover:scale-110 transition-transform shadow-red-glow" aria-hidden="true">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white uppercase tracking-wider mb-3">Elo &amp; Form Signals</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                            Combines Elo team-strength ratings with recent match form and expected goals to gauge each side before kick-off.
+                        </p>
+                    </div>
+
+                    <div class="glass-panel p-8 rounded-2xl hover:border-activeRed/50 transition-all group">
+                        <div class="w-12 h-12 rounded-xl bg-activeRed/10 border border-activeRed/30 flex items-center justify-center text-activeRed text-xl mb-6 group-hover:scale-110 transition-transform shadow-red-glow" aria-hidden="true">
+                            <i class="fa-solid fa-scale-balanced"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white uppercase tracking-wider mb-3">Honest Benchmarks</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                            Every model is tested on matches it has never seen and compared against simple baselines and the bookmakers, so you can see exactly how good it is.
+                        </p>
                     </div>
                 </div>
-        <a href= "{% url 'about' %}" class="text-sm font-medium text-gray-300 hover:text-activeRed transition-colors">About Us</a>
-        <a href="{% url 'contact' %}" class="text-sm font-medium text-gray-300 hover:text-activeRed transition-colors">Contact Us</a>
-    </nav>
-
-    <!-- Action Buttons -->
-    <div class="flex items-center gap-3">
-        <button onclick="openModal('loginModal')" class="px-5 py-2.5 text-sm font-semibold text-gray-200 hover:text-white transition-colors">
-            Log In
-        </button>
-        <button onclick="openModal('registerModal')" class="relative inline-flex items-center justify-center px-6 py-2.5 text-sm font-bold text-white bg-activeRed rounded-md overflow-hidden group shadow-red-glow hover:shadow-red-glow-lg transition-all transform hover:-translate-y-0.5">
-            <span class="absolute w-0 h-0 transition-all duration-300 ease-out bg-white rounded-full group-hover:w-32 group-hover:h-32 opacity-10"></span>
-            <span class="relative uppercase tracking-wider flex items-center gap-2">
-                Get Started <i class="fa-solid fa-arrow-right text-xs"></i>
-            </span>
-        </button>
-    </div>
-    </div>
-</header>
-
-    <!-- HERO SECTION -->
-    <section class="relative pt-16 pb-24 lg:pt-24 lg:pb-32 overflow-hidden">
-        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-activeRed/10 rounded-full blur-[140px] pointer-events-none"></div>
-        <div class="absolute top-1/3 right-10 w-[300px] h-[300px] bg-glowRed/10 rounded-full blur-[100px] pointer-events-none"></div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <!-- Badge -->
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sportCard border border-activeRed/30 text-activeRed text-xs font-semibold uppercase tracking-widest mb-6 shadow-red-glow">
-                    <span class="w-2 h-2 rounded-full bg-activeRed pulse-active"></span>
-                    Next-Gen Football Match Predictive Intelligence
-                </div>
-
-                <!-- Main Heading -->
-                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white uppercase italic leading-none mb-6">
-                    PREDICT <span class="inline-block pr-3 text-transparent bg-clip-text bg-gradient-to-r from-white via-red-200 to-activeRed">MATCH</span> OUTCOMES
-                </h1>
-
-                <p class="text-lg sm:text-xl text-gray-400 font-normal leading-relaxed mb-8">
-                    ScoreLine evaluates historical match data, team strength, recent form, and overall player Elo ratings to forecast home win, draw, and away win probabilities before kick-off.</p>
-                </p>
-
-                <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="predictor.html" class="w-full sm:w-auto px-8 py-4 bg-activeRed hover:bg-red-600 text-white font-bold rounded-lg shadow-red-glow hover:shadow-red-glow-lg transition-all transform hover:-translate-y-1 uppercase tracking-wider text-sm flex items-center justify-center gap-3">
-                        <i class="fa-solid fa-play"></i> Launch Interactive Predictor
-                    </a>
-                    <button onclick="openModal('registerModal')" class="w-full sm:w-auto px-8 py-4 bg-sportCard hover:bg-sportBorder text-gray-200 hover:text-white border border-sportBorder font-semibold rounded-lg transition-all text-sm uppercase tracking-wider flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-user-plus text-activeRed"></i> Create Free Account
-                    </button>
-                </div>
             </div>
+        </section>
 
-            <!-- Key Metric Highlights Banner -->
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-5xl mx-auto">
-                {% comment %} <div class="glass-panel p-5 rounded-xl text-center border-l-4 border-l-activeRed">
-                    <div class="text-3xl lg:text-4xl font-extrabold text-white font-['Teko'] tracking-wider">94.8%</div>
-                    <div class="text-xs text-gray-400 uppercase font-semibold mt-1">Model Accuracy</div>
-                </div> {% endcomment %}
-                <div class="glass-panel p-5 rounded-xl text-center border-l-4 border-l-activeRed">
-                    <div class="text-3xl lg:text-4xl font-extrabold text-white font-['Teko'] tracking-wider">10,000+</div>
-                    <div class="text-xs text-gray-400 uppercase font-semibold mt-1">Match Records</div>
-                </div>
-                <div class="glass-panel p-5 rounded-xl text-center border-l-4 border-l-activeRed">
-                    <div class="text-3xl lg:text-4xl font-extrabold text-white font-['Teko'] tracking-wider">&lt; 150ms</div>
-                    <div class="text-xs text-gray-400 uppercase font-semibold mt-1">Prediction Speed</div>
-                </div>
-                <div class="glass-panel p-5 rounded-xl text-center border-l-4 border-l-activeRed">
-                    <div class="text-3xl lg:text-4xl font-extrabold text-white font-['Teko'] tracking-wider">5</div>
-                    <div class="text-xs text-gray-400 uppercase font-semibold mt-1">Leagues</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- KEY FEATURES SECTION -->
-    <section id="features" class="py-20 bg-sportCard/30 border-y border-sportBorder/50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-16">
-                <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Platform Capabilities</span>
-                <h2 class="text-3xl sm:text-5xl font-black text-white uppercase italic tracking-tight mt-1">
-                    KEY FEATURES & HIGHLIGHTS
-                </h2>
-                <p class="text-gray-400 text-sm mt-3">
-                    Discover what makes our machine learning platform the premier tool for football data analytics.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div class="glass-panel p-8 rounded-2xl hover:border-activeRed/50 transition-all group">
-                    <div class="w-12 h-12 rounded-xl bg-activeRed/10 border border-activeRed/30 flex items-center justify-center text-activeRed text-xl mb-6 group-hover:scale-110 transition-transform shadow-red-glow">
-                        <i class="fa-solid fa-sliders"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white uppercase tracking-wider mb-3">Match Outcome Probabilities</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
-                        Forecast home win, draw, and away win odds that sum to 100%, built around full-match results rather than individual player stat projections.
+        <!-- CALL TO ACTION BANNER -->
+        <section class="py-20 relative overflow-hidden">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="glass-panel-active p-8 sm:p-12 rounded-3xl text-center relative z-10 border border-activeRed/50 shadow-red-glow-lg">
+                    <h2 class="text-3xl sm:text-5xl font-black text-white uppercase italic tracking-tight mb-4">
+                        READY TO PREDICT THE NEXT MATCHDAY?
+                    </h2>
+                    <p class="text-gray-300 max-w-xl mx-auto text-sm sm:text-base mb-8">
+                        Join analysts and sports enthusiasts exploring data-driven football predictions today.
                     </p>
-                </div>
-
-                <!-- Feature 2 -->
-                <div class="glass-panel p-8 rounded-2xl hover:border-activeRed/50 transition-all group">
-                    <div class="w-12 h-12 rounded-xl bg-activeRed/10 border border-activeRed/30 flex items-center justify-center text-activeRed text-xl mb-6 group-hover:scale-110 transition-transform shadow-red-glow">
-                        <i class="fa-solid fa-chart-line"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white uppercase tracking-wider mb-3">Player Elo & Form Signals</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
-                        Incorporates overall player Elo ratings alongside team strength and recent match form as model inputs to gauge squad quality before kick-off.</p>
-                    </p>
-                </div>
-
-                <!-- Feature 3 -->
-                <div class="glass-panel p-8 rounded-2xl hover:border-activeRed/50 transition-all group">
-                    <div class="w-12 h-12 rounded-xl bg-activeRed/10 border border-activeRed/30 flex items-center justify-center text-activeRed text-xl mb-6 group-hover:scale-110 transition-transform shadow-red-glow">
-                        <i class="fa-solid fa-shield-halved"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white uppercase tracking-wider mb-3">Secured Architecture</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-4">
-                        ScoreLine runs on a Django backend with supabase storage and safe pre-kick-off data pipelines.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CALL TO ACTION BANNER -->
-    <section class="py-20 relative overflow-hidden">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="glass-panel-active p-8 sm:p-12 rounded-3xl text-center relative z-10 border border-activeRed/50 shadow-red-glow-lg">
-                <h2 class="text-3xl sm:text-5xl font-black text-white uppercase italic tracking-tight mb-4">
-                    READY TO PREDICT THE NEXT MATCHDAY?
-                </h2>
-                <p class="text-gray-300 max-w-xl mx-auto text-sm sm:text-base mb-8">
-                    Join analysts and sports enthusiasts leveraging data-driven football predictions today.
-                </p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <a href="predictor.html" class="w-full sm:w-auto px-8 py-4 bg-activeRed hover:bg-red-600 text-white font-extrabold rounded-xl shadow-red-glow transition-all uppercase tracking-wider text-sm flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-play"></i> Launch Predictor Workspace
-                    </a>
-                    <button onclick="openModal('registerModal')" class="w-full sm:w-auto px-8 py-4 bg-sportCard hover:bg-sportBorder text-white font-bold rounded-xl border border-sportBorder transition-all uppercase tracking-wider text-sm">
-                        Create Free Account
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- COMPREHENSIVE FOOTER (Links to all pages) -->
-<footer class="bg-black border-t border-sportBorder/60 py-12">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-        <div>
-            <div class="flex items-center gap-3 mb-4">
-                <div class="w-8 h-8 bg-activeRed rounded flex items-center justify-center text-white text-sm font-bold shadow-red-glow">
-                    <i class="fa-solid fa-bolt"></i>
-                </div>
-                <span class="font-bold text-lg text-white font-['Teko'] tracking-wider">SCORE<span class="text-activeRed">LINE</span></span>
-            </div>
-            <p class="text-xs text-gray-400 leading-relaxed">
-                Explore home win, draw, and away win forecasts powered by ScoreLine before the next whistle.
-            </p>
-        </div>
-        <div>
-            <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Platform Pages</h4>
-            <ul class="space-y-2 text-xs text-gray-400">
-                <li><a href="index.html" class="hover:text-activeRed transition-colors">Home / Landing</a></li>
-                <li><a href="predictor.html" class="hover:text-activeRed transition-colors">Live Predictor</a></li>
-                <li><a href="about.html" class="hover:text-activeRed transition-colors">About Us & Methodology</a></li>
-                <li><a href="contact.html" class="hover:text-activeRed transition-colors">Contact Support</a></li>
-            </ul>
-        </div>
-        <div>
-            <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Account Access</h4>
-            <ul class="space-y-2 text-xs text-gray-400">
-                <li><button onclick="openModal('loginModal')" class="hover:text-activeRed transition-colors text-left">Sign In</button></li>
-                <li><button onclick="openModal('registerModal')" class="hover:text-activeRed transition-colors text-left">Create Account</button></li>
-            </ul>
-        </div>
-        <div>
-            <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Legal & Security</h4>
-            <ul class="space-y-2 text-xs text-gray-400">
-                <li><a href="#" class="hover:text-activeRed transition-colors">Privacy Policy</a></li>
-                <li><a href="#" class="hover:text-activeRed transition-colors">Terms of Service</a></li>
-                <li><a href="#" class="hover:text-activeRed transition-colors">API Documentation</a></li>
-                <li><a href="#" class="hover:text-activeRed transition-colors">Security Audit (AES-256)</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 border-t border-sportBorder/40 text-center text-xs text-gray-500">
-        © 2026 ScoreLine (Pitch Analytics). All rights reserved. For analytical insight, not betting advice.
-    </div>
-</footer>
-
-    <!-- LOGIN MODAL -->
-    <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-2xl border border-activeRed/40 shadow-red-glow relative">
-            <button onclick="closeModal('loginModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div class="text-center mb-6">
-                <h3 class="text-2xl font-black text-white uppercase italic">Welcome Back</h3>
-                <p class="text-xs text-gray-400 mt-1">Sign in to access your account</p>
-            </div>
-            <form onsubmit="handleAuthSubmit(event, 'Login Successful!')" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Username or Email</label>
-                    <input type="text" required placeholder="analyst@SCORELINE.com" class="w-full bg-sportCard border border-sportBorder rounded-lg p-3 text-sm text-white focus:outline-none focus:border-activeRed">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Password</label>
-                    <input type="password" required placeholder="••••••••" class="w-full bg-sportCard border border-sportBorder rounded-lg p-3 text-sm text-white focus:outline-none focus:border-activeRed">
-                </div>
-                <button type="submit" class="w-full py-3.5 bg-activeRed hover:bg-red-600 text-white font-bold rounded-lg uppercase tracking-wider text-xs shadow-red-glow transition-all">
-                    Sign In
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- REGISTER MODAL -->
-    <div id="registerModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-2xl border border-activeRed/40 shadow-red-glow relative">
-            <button onclick="closeModal('registerModal')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div class="text-center mb-6">
-                <h3 class="text-2xl font-black text-white uppercase italic">Create Account</h3>
-                <p class="text-xs text-gray-400 mt-1">Join SCORELINE today</p>
-            </div>
-            <form onsubmit="handleAuthSubmit(event, 'Account Created Successfully!')" class="space-y-4">
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">First Name</label>
-                        <input type="text" required placeholder="Name" class="w-full bg-sportCard border border-sportBorder rounded-lg p-3 text-sm text-white focus:outline-none focus:border-activeRed">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Last Name</label>
-                        <input type="text" required placeholder="Surname" class="w-full bg-sportCard border border-sportBorder rounded-lg p-3 text-sm text-white focus:outline-none focus:border-activeRed">
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <a href="predictor.html" class="w-full sm:w-auto px-8 py-4 bg-ctaRed hover:bg-ctaRedHover text-white font-extrabold rounded-xl shadow-red-glow transition-all uppercase tracking-wider text-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-play" aria-hidden="true"></i> Launch Predictor Workspace
+                        </a>
+                        <a href="about.html" class="w-full sm:w-auto px-8 py-4 bg-sportCard hover:bg-sportBorder text-white font-bold rounded-xl border border-sportBorder transition-all uppercase tracking-wider text-sm">
+                            How It Works
+                        </a>
                     </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Email Address</label>
-                    <input type="email" required placeholder="analyst@Scoreline.com" class="w-full bg-sportCard border border-sportBorder rounded-lg p-3 text-sm text-white focus:outline-none focus:border-activeRed">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-1">Password</label>
-                    <input type="password" required placeholder="••••••••" class="w-full bg-sportCard border border-sportBorder rounded-lg p-3 text-sm text-white focus:outline-none focus:border-activeRed">
-                </div>
-                <button type="submit" class="w-full py-3.5 bg-activeRed hover:bg-red-600 text-white font-bold rounded-lg uppercase tracking-wider text-xs shadow-red-glow transition-all">
-                    Register Account
-                </button>
-            </form>
-        </div>
-    </div>
+            </div>
+        </section>
+    </main>
 
-    <script>
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden') || document.getElementById(id).classList.remove('hidden');
-        }
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
-        function handleAuthSubmit(event, message) {
-            event.preventDefault();
-            alert(message);
-            closeModal('loginModal');
-            closeModal('registerModal');
-        }
-    </script>
+    <div id="site-footer"></div>
 </body>
 </html>

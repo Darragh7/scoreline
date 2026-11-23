@@ -19,5 +19,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ScoreLine/',include('ScoreLine.urls'))
+    path('', include('ScoreLine.urls')),
+    # Same pages under /ScoreLine/ (the prefix used in an earlier version); namespaced so names don't clash
+    path('ScoreLine/', include(('ScoreLine.urls', 'ScoreLine'), namespace='scoreline_prefixed')),
 ]

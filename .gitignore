@@ -101,3 +101,10 @@ dist/
 .eggs/
 
 
+
+# ============================================================
+# Model output (generated per run, never committed; see docs/prediction_format.md)
+# ============================================================
+
+predictions.json
+data/predictions.json

@@ -13,7 +13,7 @@
         { id: 'predictor', href: 'predictor.html', label: 'Predictor', children: [
             { href: 'predictor.html', icon: 'fa-bolt', label: 'Live Predictor' },
             { href: 'predictor.html#fixtures', icon: 'fa-calendar-days', label: 'Browse Fixtures' },
-            { href: 'predictor.html#analytics', icon: 'fa-chart-line', label: 'Model Performance' }
+            { href: 'about.html#performance', icon: 'fa-chart-line', label: 'Model Performance' }
         ] },
         { id: 'about', href: 'about.html', label: 'About Us' },
         { id: 'contact', href: 'contact.html', label: 'Contact Us' }
@@ -119,7 +119,7 @@
                 '<div><h2 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Transparency</h2>' +
                     '<ul class="space-y-2 text-xs text-gray-400">' +
                         '<li><a href="about.html#method" class="hover:text-activeRed transition-colors">How Predictions Are Made</a></li>' +
-                        '<li><a href="predictor.html#analytics" class="hover:text-activeRed transition-colors">Model Performance</a></li>' +
+                        '<li><a href="about.html#performance" class="hover:text-activeRed transition-colors">Model Performance</a></li>' +
                         '<li><a href="contact.html" class="hover:text-activeRed transition-colors">Support &amp; Feedback</a></li>' +
                     '</ul></div>' +
             '</div>' +
