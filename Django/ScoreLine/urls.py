@@ -11,6 +11,12 @@ urlpatterns = [
     path('contact.html', views.contact, name='contact'),
     path('api/predictions/', views.predictions_api, name='predictions_api'),
 
+    # Accounts (login/signup logic from main). Mark's landing page with the working forms.
+    path('landing/', views.landing, name='landing'),
+    path('signup/', views.signup, name='signup'),
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
+
     # Short aliases (also reachable under /ScoreLine/, see Practice/urls.py)
     path('home', views.index),
     path('predictor', views.predictor),

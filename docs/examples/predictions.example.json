@@ -1,0 +1,39 @@
+{
+  "model_version": "v1",
+  "generated_at": "2026-11-18T12:00:00+00:00",
+  "predictions": [
+    {
+      "match_id": 900001,
+      "competition": "PL",
+      "home_team": "Arsenal",
+      "away_team": "Chelsea",
+      "kickoff": "2026-11-21T15:00:00Z",
+      "home_win": 0.6692,
+      "draw": 0.209,
+      "away_win": 0.1218,
+      "flags": []
+    },
+    {
+      "match_id": 900002,
+      "competition": "PD",
+      "home_team": "Real Madrid",
+      "away_team": "Barcelona",
+      "kickoff": "2026-11-22T20:00:00Z",
+      "home_win": 0.359,
+      "draw": 0.2661,
+      "away_win": 0.3749,
+      "flags": []
+    },
+    {
+      "match_id": 900003,
+      "competition": "SA",
+      "home_team": "Inter Milan",
+      "away_team": "Juventus",
+      "kickoff": "2026-11-22T19:45:00Z",
+      "home_win": 0.5591,
+      "draw": 0.2493,
+      "away_win": 0.1916,
+      "flags": ["history_ends:2026-09-20"]
+    }
+  ]
+}

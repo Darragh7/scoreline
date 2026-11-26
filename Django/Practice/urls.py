@@ -15,10 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # Old /webplay/ links (and old bookmarks) go to the new home page
+    path('webplay/', RedirectView.as_view(url='/', permanent=False)),
     path('', include('ScoreLine.urls')),
     # Same pages under /ScoreLine/ (the prefix used in an earlier version); namespaced so names don't clash
     path('ScoreLine/', include(('ScoreLine.urls', 'ScoreLine'), namespace='scoreline_prefixed')),

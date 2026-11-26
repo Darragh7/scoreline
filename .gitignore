@@ -19,6 +19,7 @@ env/
 .env
 .env.*
 !.env.example
+kubernetes/secrets.*
 
 # ============================================================
 # Django
@@ -100,7 +101,12 @@ dist/
 *.egg-info/
 .eggs/
 
+# ML pipeline (ai/ml_pipeline): local data and outputs, never commit
+ai/ml_pipeline/data/
+!ai/ml_pipeline/team_mapping.csv
 
+# Trained models (ai/training/predict.py): generated locally, never commit
+ai/training/models/
 
 # ============================================================
 # Model output (generated per run, never committed; see docs/prediction_format.md)
