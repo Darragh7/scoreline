@@ -6,7 +6,7 @@ from unittest.mock import patch
 from django.test import SimpleTestCase, TestCase, override_settings
 from django.urls import reverse
 
-from webplay.views import (
+from ScoreLine.views import (
     AuthenticationBackendUnavailable,
     _call_auth_backend,
     _decode_backend_response,
@@ -23,7 +23,7 @@ class AuthenticationBackendHelperTests(SimpleTestCase):
         self.assertEqual(_decode_backend_response(b"not json"), {})
         self.assertEqual(_decode_backend_response(b"[]"), {})
 
-    @patch("webplay.views.urlopen")
+    @patch("ScoreLine.views.urlopen")
     @override_settings(BACKEND_API_URL="https://backend.test")
     def test_call_auth_backend_sends_json_post_and_decodes_response(self, urlopen):
         response = urlopen.return_value.__enter__.return_value
@@ -41,7 +41,7 @@ class AuthenticationBackendHelperTests(SimpleTestCase):
         self.assertEqual(json.loads(request.data), payload)
         self.assertEqual(urlopen.call_args.kwargs["timeout"], 5)
 
-    @patch("webplay.views.urlopen")
+    @patch("ScoreLine.views.urlopen")
     def test_call_auth_backend_decodes_http_error_response(self, urlopen):
         urlopen.side_effect = HTTPError(
             "http://localhost:8002/users/login",
@@ -55,7 +55,7 @@ class AuthenticationBackendHelperTests(SimpleTestCase):
 
         self.assertEqual(result, (401, {"detail": "Invalid credentials"}))
 
-    @patch("webplay.views.urlopen", side_effect=URLError("connection refused"))
+    @patch("ScoreLine.views.urlopen", side_effect=URLError("connection refused"))
     def test_call_auth_backend_wraps_network_errors(self, _urlopen):
         with self.assertRaises(AuthenticationBackendUnavailable):
             _call_auth_backend("login", {})
@@ -69,7 +69,7 @@ class AuthenticationBackendHelperTests(SimpleTestCase):
 
 class AuthenticationViewTests(TestCase):
 
-    @patch("webplay.views._call_auth_backend")
+    @patch("ScoreLine.views._call_auth_backend")
     def test_signup_creates_session_after_backend_success(self, call_backend):
         call_backend.return_value = (
             201,
@@ -99,7 +99,7 @@ class AuthenticationViewTests(TestCase):
             },
         )
 
-    @patch("webplay.views._call_auth_backend")
+    @patch("ScoreLine.views._call_auth_backend")
     def test_login_rejects_invalid_credentials_without_creating_session(
         self, call_backend
     ):
@@ -116,7 +116,7 @@ class AuthenticationViewTests(TestCase):
         self.assertRedirects(response, reverse("landing"))
         self.assertNotIn("user_id", self.client.session)
 
-    @patch("webplay.views._call_auth_backend")
+    @patch("ScoreLine.views._call_auth_backend")
     def test_login_creates_session_after_backend_success(self, call_backend):
         call_backend.return_value = (
             200,
@@ -145,6 +145,6 @@ class AuthenticationViewTests(TestCase):
     def test_landing_page_forms_include_csrf_tokens(self):
         response = self.client.get(reverse("landing"))
 
-        self.assertContains(response, 'action="/webplay/login/"')
-        self.assertContains(response, 'action="/webplay/signup/"')
+        self.assertContains(response, 'action="/login/"')
+        self.assertContains(response, 'action="/signup/"')
         self.assertContains(response, 'name="csrfmiddlewaretoken"')

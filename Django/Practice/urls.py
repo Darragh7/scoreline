@@ -19,7 +19,10 @@ from django.urls import include, path
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='/webplay/', permanent=False)),
     path('admin/', admin.site.urls),
-    path('webplay/',include('webplay.urls'))
+    # Old /webplay/ links (and old bookmarks) go to the new home page
+    path('webplay/', RedirectView.as_view(url='/', permanent=False)),
+    path('', include('ScoreLine.urls')),
+    # Same pages under /ScoreLine/ (the prefix used in an earlier version); namespaced so names don't clash
+    path('ScoreLine/', include(('ScoreLine.urls', 'ScoreLine'), namespace='scoreline_prefixed')),
 ]

@@ -1,0 +1,31 @@
+{
+    // Live Server: serve the project root on http://localhost:5500
+    "liveServer.settings.port": 5500,
+    "liveServer.settings.root": "/",
+    "liveServer.settings.host": "localhost",
+    "liveServer.settings.CustomBrowser": "chrome",
+    "liveServer.settings.donotShowInfoMsg": true,
+    // Don't reload the browser when docs, editor config or backend code change
+    "liveServer.settings.ignoreFiles": [
+        ".vscode/**",
+        "**/*.md",
+        "backend/**",
+        "Django/**",
+        "ai/**"
+    ],
+
+    "editor.formatOnSave": false,
+    "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "prettier.tabWidth": 4,
+    "prettier.printWidth": 140,
+
+    // Tailwind IntelliSense for the class strings built in js/*.js
+    "tailwindCSS.includeLanguages": { "javascript": "javascript", "html": "html" },
+    "files.associations": {
+        "*.html": "html"
+    },
+    "python-envs.defaultEnvManager": "ms-python.python:pipenv"
+}

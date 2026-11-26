@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'webplay'
+    'ScoreLine',
 ]
 
 MIDDLEWARE = [
@@ -70,7 +70,9 @@ ROOT_URLCONF = 'Practice.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'webplay' / 'Templates'],
+        # The app folder is "Templates" (capital T). Listing it here makes it work on
+        # case-sensitive systems too (APP_DIRS only looks for lowercase "templates").
+        'DIRS': [BASE_DIR / 'ScoreLine' / 'Templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,6 +134,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+# css/ and js/ live in ScoreLine/static/ (found automatically by the app-directories finder).
+
+# predictions.json written by the ML pipeline (never committed). Served at /api/predictions/.
+PREDICTIONS_FILE = os.environ.get('PREDICTIONS_FILE', str(BASE_DIR.parent / 'data' / 'predictions.json'))
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

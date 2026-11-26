@@ -48,7 +48,12 @@ htmlcov/
 # IDE / Editors
 # ============================================================
 
-.vscode/
+.vscode/*
+# Shared project config for running the frontend (Live Server, debug, tasks)
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
 .idea/
 
 # VS Code Python settings
@@ -102,3 +107,10 @@ ai/ml_pipeline/data/
 
 # Trained models (ai/training/predict.py): generated locally, never commit
 ai/training/models/
+
+# ============================================================
+# Model output (generated per run, never committed; see docs/prediction_format.md)
+# ============================================================
+
+predictions.json
+data/predictions.json

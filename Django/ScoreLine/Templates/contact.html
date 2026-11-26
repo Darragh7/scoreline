@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - ScoreLine</title>
+    <meta name="description" content="Send feedback, report a bug or suggest a feature for ScoreLine.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{% static 'js/tailwind-config.js' %}"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body data-page="contact" class="sport-grid min-h-screen flex flex-col antialiased selection:bg-activeRed selection:text-white">
+    <div id="site-header"></div>
+    <script src="{% static 'js/layout.js' %}"></script>
+
+    <main id="main" class="flex-1 w-full" tabindex="-1">
+        <!-- HERO -->
+        <section class="relative pt-14 pb-12 overflow-hidden">
+            <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] max-w-full h-[550px] bg-activeRed/10 rounded-full blur-[140px] pointer-events-none" aria-hidden="true"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sportCard border border-activeRed/30 text-activeRed text-xs font-semibold uppercase tracking-widest mb-5 shadow-red-glow">
+                        <i class="fa-solid fa-envelope" aria-hidden="true"></i> Get In Touch
+                    </div>
+                    <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white uppercase italic leading-none mb-5">
+                        CONTACT <span class="inline-block pr-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-red-200 to-activeRed">SCORELINE</span>
+                    </h1>
+                    <p class="text-base sm:text-lg text-gray-300 leading-relaxed">
+                        Feedback on our match forecasts, a question about how the models work, or an issue you spotted on the site? Tell us below. Every message is read by the team.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="pb-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+                    <!-- FORM -->
+                    <div class="lg:col-span-7 glass-panel p-6 sm:p-8 rounded-3xl border border-sportBorder">
+                        <div id="formView">
+                            <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Feedback form</span>
+                            <h2 class="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tight mt-1 mb-2">SEND A MESSAGE</h2>
+                            <p class="text-xs text-gray-400 mb-6">Fields marked <span class="text-activeRed font-bold" aria-hidden="true">*</span><span class="sr-only-custom">with an asterisk</span> are required.</p>
+
+                            <div id="submitError" class="hidden mb-6 p-4 rounded-xl bg-activeRed/10 border border-activeRed/40 text-sm text-red-200 flex items-start gap-3" role="alert">
+                                <i class="fa-solid fa-triangle-exclamation text-activeRed mt-0.5" aria-hidden="true"></i><span id="submitErrorText"></span>
+                            </div>
+                            <div id="errorSummary" class="hidden mb-6 p-4 rounded-xl bg-activeRed/10 border border-activeRed/40 text-sm text-red-200" role="alert" tabindex="-1"></div>
+
+                            <form id="contactForm" class="space-y-5" novalidate>
+                                <!-- Honeypot: leave empty. Hidden from people and screen readers. -->
+                                <div class="hp-field" aria-hidden="true">
+                                    <label for="website">Website (leave this empty)</label>
+                                    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="full_name" class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">Full name <span class="text-activeRed" aria-hidden="true">*</span></label>
+                                        <input type="text" id="full_name" name="full_name" required maxlength="100" autocomplete="name" aria-describedby="full_name-error"
+                                               placeholder="Alex Morgan"
+                                               class="w-full bg-sportCard border border-sportBorder rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-activeRed transition-colors">
+                                        <p id="full_name-error" class="field-error text-xs mt-1.5 hidden"></p>
+                                    </div>
+                                    <div>
+                                        <label for="email" class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">Email address <span class="text-activeRed" aria-hidden="true">*</span></label>
+                                        <input type="email" id="email" name="email" required maxlength="254" autocomplete="email" aria-describedby="email-error"
+                                               placeholder="you@example.com"
+                                               class="w-full bg-sportCard border border-sportBorder rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-activeRed transition-colors">
+                                        <p id="email-error" class="field-error text-xs mt-1.5 hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="phone" class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">Phone <span class="text-gray-400 normal-case font-semibold">(optional)</span></label>
+                                        <input type="tel" id="phone" name="phone" maxlength="20" autocomplete="tel" aria-describedby="phone-hint phone-error"
+                                               placeholder="+353 87 123 4567"
+                                               class="w-full bg-sportCard border border-sportBorder rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-activeRed transition-colors">
+                                        <p id="phone-hint" class="text-[11px] text-gray-400 mt-1.5">Only if you'd like a call back.</p>
+                                        <p id="phone-error" class="field-error text-xs mt-1 hidden"></p>
+                                    </div>
+                                    <div>
+                                        <label for="subject" class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">Feedback type <span class="text-activeRed" aria-hidden="true">*</span></label>
+                                        <select id="subject" name="subject" required aria-describedby="subject-error"
+                                                class="sl-select w-full bg-sportCard border border-sportBorder rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-activeRed transition-colors">
+                                            <option value="">Choose a type…</option>
+                                            <option value="general">General feedback</option>
+                                            <option value="prediction_accuracy">Prediction accuracy</option>
+                                            <option value="bug_report">Bug report</option>
+                                            <option value="feature_request">Feature request</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                        <p id="subject-error" class="field-error text-xs mt-1.5 hidden"></p>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex items-end justify-between mb-2">
+                                        <label for="message" class="block text-xs font-bold text-gray-300 uppercase tracking-wider">Message <span class="text-activeRed" aria-hidden="true">*</span></label>
+                                        <span id="charCount" class="text-[11px] text-gray-400 tabular" aria-live="polite">0 / 1000</span>
+                                    </div>
+                                    <textarea id="message" name="message" rows="6" required minlength="10" maxlength="1000" aria-describedby="message-hint message-error"
+                                              placeholder="Tell us what you'd like to share with the ScoreLine team…"
+                                              class="w-full bg-sportCard border border-sportBorder rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-activeRed transition-colors resize-y"></textarea>
+                                    <p id="message-hint" class="text-[11px] text-gray-400 mt-1.5">At least 10 characters. For a bug, tell us which page and what you clicked.</p>
+                                    <p id="message-error" class="field-error text-xs mt-1 hidden"></p>
+                                </div>
+
+                                <fieldset>
+                                    <legend class="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">How would you rate ScoreLine? <span class="text-gray-400 normal-case font-semibold">(optional)</span></legend>
+                                    <div class="flex flex-wrap items-center gap-3">
+                                        <div class="star-rating flex items-center" id="starRating">
+                                            <input type="radio" id="rate1" name="rating" value="1"><label for="rate1" title="1 out of 5"><i class="fa-solid fa-star" aria-hidden="true"></i><span class="sr-only-custom">1 star, poor</span></label>
+                                            <input type="radio" id="rate2" name="rating" value="2"><label for="rate2" title="2 out of 5"><i class="fa-solid fa-star" aria-hidden="true"></i><span class="sr-only-custom">2 stars, fair</span></label>
+                                            <input type="radio" id="rate3" name="rating" value="3"><label for="rate3" title="3 out of 5"><i class="fa-solid fa-star" aria-hidden="true"></i><span class="sr-only-custom">3 stars, good</span></label>
+                                            <input type="radio" id="rate4" name="rating" value="4"><label for="rate4" title="4 out of 5"><i class="fa-solid fa-star" aria-hidden="true"></i><span class="sr-only-custom">4 stars, very good</span></label>
+                                            <input type="radio" id="rate5" name="rating" value="5"><label for="rate5" title="5 out of 5"><i class="fa-solid fa-star" aria-hidden="true"></i><span class="sr-only-custom">5 stars, excellent</span></label>
+                                        </div>
+                                        <span id="ratingText" class="text-xs text-gray-400">No rating</span>
+                                        <button type="button" id="clearRating" class="hidden text-xs text-gray-400 underline hover:text-white">Clear</button>
+                                    </div>
+                                </fieldset>
+
+                                <button type="submit" id="submitBtn"
+                                        class="w-full sm:w-auto px-8 py-4 bg-ctaRed hover:bg-ctaRedHover disabled:opacity-60 disabled:cursor-wait text-white font-bold rounded-xl shadow-red-glow hover:shadow-red-glow-lg transition-all uppercase tracking-wider text-xs sm:text-sm inline-flex items-center justify-center gap-2.5">
+                                    <i class="fa-solid fa-paper-plane" aria-hidden="true"></i><span>Send Message</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- SUCCESS -->
+                        <div id="successView" class="hidden text-center py-8" role="status" tabindex="-1">
+                            <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-2xl" aria-hidden="true">
+                                <i class="fa-solid fa-circle-check"></i>
+                            </div>
+                            <h2 class="text-2xl sm:text-3xl font-black text-white uppercase italic tracking-tight mb-2">MESSAGE SENT</h2>
+                            <p id="successText" class="text-sm text-gray-300 max-w-md mx-auto mb-2">Thanks for reaching out. We usually reply within 24–48 hours.</p>
+                            <p id="successDemo" class="hidden text-xs text-amber-200 max-w-md mx-auto mb-2"><i class="fa-solid fa-flask mr-1" aria-hidden="true"></i>Demo mode: the message wasn't sent to a server. The payload was logged to the browser console.</p>
+                            <button type="button" id="sendAnother" class="mt-5 px-6 py-3 bg-sportCard hover:bg-sportBorder border border-sportBorder text-white font-bold rounded-xl uppercase tracking-wider text-xs">Send another message</button>
+                        </div>
+                    </div>
+
+                    <!-- SIDE PANEL -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="glass-panel p-7 rounded-3xl border border-sportBorder">
+                            <span class="text-activeRed font-bold text-xs uppercase tracking-widest">Contact channels</span>
+                            <h2 class="text-xl font-bold text-white uppercase tracking-wider mt-1 mb-5">SCORELINE SUPPORT</h2>
+                            <ul class="space-y-4 text-sm">
+                                <li class="p-4 bg-sportCard rounded-2xl border border-sportBorder flex items-start gap-3.5">
+                                    <div class="w-9 h-9 rounded-lg bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed shrink-0" aria-hidden="true"><i class="fa-solid fa-at"></i></div>
+                                    <div><div class="text-xs font-bold text-gray-400 uppercase tracking-wider">Email</div>
+                                        <div class="text-white font-semibold mt-0.5 break-all">scorline.support@gmail.com</div></div>
+                                </li>
+                                <li class="p-4 bg-sportCard rounded-2xl border border-sportBorder flex items-start gap-3.5">
+                                    <div class="w-9 h-9 rounded-lg bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed shrink-0" aria-hidden="true"><i class="fa-solid fa-clock"></i></div>
+                                    <div><div class="text-xs font-bold text-gray-400 uppercase tracking-wider">Response window</div>
+                                        <div class="text-white font-semibold mt-0.5">Typically within 24–48 hours</div></div>
+                                </li>
+                                <li class="p-4 bg-sportCard rounded-2xl border border-sportBorder flex items-start gap-3.5">
+                                    <div class="w-9 h-9 rounded-lg bg-activeRed/15 border border-activeRed/30 flex items-center justify-center text-activeRed shrink-0" aria-hidden="true"><i class="fa-solid fa-circle-info"></i></div>
+                                    <div><div class="text-xs font-bold text-gray-400 uppercase tracking-wider">Model details</div>
+                                        <p class="text-xs text-gray-300 mt-0.5 leading-relaxed">Curious how home win, draw and away win probabilities work? Read <a href="about.html#method" class="text-activeRed hover:underline font-semibold">how predictions are made</a> or check the <a href="about.html#performance" class="text-activeRed hover:underline font-semibold">model performance table</a>.</p></div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="p-6 rounded-2xl bg-activeRed/10 border border-activeRed/40">
+                            <div class="flex items-center gap-2 text-activeRed font-bold text-xs uppercase tracking-wider mb-2">
+                                <i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>Analytical purpose only</span>
+                            </div>
+                            <p class="text-xs text-gray-200 leading-relaxed">ScoreLine provides match outcome probabilities for analytical exploration and learning, not betting or financial advice. We only use your details to reply to your message.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script>window.SCORELINE_CONFIG = { API_BASE_URL: "", PREDICTIONS_ENDPOINT: "{% url 'predictions_api' %}", PREDICTIONS_FILE: null };</script>
+    <script src="{% static 'js/api.js' %}"></script>
+    <script src="{% static 'js/contact.js' %}"></script>
+</body>
+</html>

@@ -12,7 +12,7 @@ Unit tests cover the backend API and services, Django pages and authentication. 
 
 ```
 python -m pytest backend/tests
-cd Django && python manage.py test webplay
+cd Django && python manage.py test ScoreLine
 ```
 
 ## Acceptance Tests
