@@ -19,12 +19,40 @@ from django.core.exceptions import ImproperlyConfigured
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+def _load_env_file(path):
+    """Read KEY=value lines from the project's .env (no extra packages needed).
+
+    Real environment variables always win, so Docker/CI settings are never overridden.
+    """
+    try:
+        lines = Path(path).read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return
+    for line in lines:
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key:
+            os.environ.setdefault(key, value)
+
+
+# <project root>/.env (see .env.example), so `python manage.py runserver` works without
+# setting environment variables by hand.
+_load_env_file(BASE_DIR.parent / ".env")
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 if not SECRET_KEY:
-    raise ImproperlyConfigured("DJANGO_SECRET_KEY must be set")
+    raise ImproperlyConfigured(
+        "DJANGO_SECRET_KEY must be set: copy .env.example to .env in the project root "
+        "and fill in DJANGO_SECRET_KEY (see README)."
+    )
 
 DEBUG = os.environ.get("DJANGO_DEBUG", "false").strip().lower() in {
     "1",

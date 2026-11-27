@@ -10,6 +10,8 @@ urlpatterns = [
     path('about.html', views.about, name='about'),
     path('contact.html', views.contact, name='contact'),
     path('api/predictions/', views.predictions_api, name='predictions_api'),
+    path('api/contact/', views.contact_api, name='contact_api'),
+    path('api/session/', views.session_api, name='session_api'),
 
     # Accounts (login/signup logic from main). Mark's landing page with the working forms.
     path('landing/', views.landing, name='landing'),

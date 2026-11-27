@@ -114,3 +114,6 @@ ai/training/models/
 
 predictions.json
 data/predictions.json
+
+# Local preview build (preview.ps1)
+.preview/

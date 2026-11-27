@@ -148,3 +148,75 @@ class AuthenticationViewTests(TestCase):
         self.assertContains(response, 'action="/login/"')
         self.assertContains(response, 'action="/signup/"')
         self.assertContains(response, 'name="csrfmiddlewaretoken"')
+
+
+class AccountJsonReplyTests(TestCase):
+    """The navbar pop-ups (static/js/layout.js) call the same views and expect JSON."""
+
+    @patch("ScoreLine.views._call_auth_backend")
+    def test_login_returns_json_for_popup(self, call_backend):
+        call_backend.return_value = (200, {"user": {"user_id": 7, "first_name": "Ada"}})
+
+        response = self.client.post(
+            reverse("login"),
+            {"identifier": "ada@example.com", "password": "correct password"},
+            HTTP_ACCEPT="application/json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["user"], {"first_name": "Ada"})
+        session = self.client.get(reverse("session_api")).json()
+        self.assertEqual(session, {"signed_in": True, "first_name": "Ada"})
+
+    @patch("ScoreLine.views._call_auth_backend", side_effect=AuthenticationBackendUnavailable)
+    def test_signup_reports_unavailable_backend_as_json(self, _call_backend):
+        response = self.client.post(reverse("signup"), {}, HTTP_ACCEPT="application/json")
+
+        self.assertEqual(response.status_code, 503)
+        self.assertFalse(response.json()["ok"])
+
+    def test_session_api_when_signed_out(self):
+        self.assertEqual(self.client.get(reverse("session_api")).json(), {"signed_in": False, "first_name": None})
+
+    def test_pages_set_csrf_cookie(self):
+        response = self.client.get(reverse("home"))
+        self.assertIn("csrftoken", response.cookies)
+
+
+class ContactApiTests(TestCase):
+
+    def valid_payload(self, **overrides):
+        payload = {
+            "full_name": "Ada Lovelace",
+            "email": "ada@example.com",
+            "phone": None,
+            "subject": "bug_report",
+            "message": "The predictor page shows the wrong kickoff time.",
+            "rating": 4,
+            "page": "/contact.html",
+        }
+        payload.update(overrides)
+        return payload
+
+    def post(self, payload):
+        return self.client.post(reverse("contact_api"), json.dumps(payload), content_type="application/json")
+
+    def test_valid_message_is_saved(self):
+        from ScoreLine.models import ContactMessage
+
+        response = self.post(self.valid_payload())
+
+        self.assertEqual(response.status_code, 201)
+        saved = ContactMessage.objects.get(pk=response.json()["id"])
+        self.assertEqual(saved.email, "ada@example.com")
+        self.assertEqual(saved.rating, 4)
+
+    def test_invalid_fields_are_reported_per_field(self):
+        response = self.post(self.valid_payload(email="nope", message="short", subject="spam"))
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(set(response.json()["errors"]), {"email", "message", "subject"})
+
+    def test_rejects_non_object_body(self):
+        response = self.client.post(reverse("contact_api"), "[]", content_type="application/json")
+        self.assertEqual(response.status_code, 400)
