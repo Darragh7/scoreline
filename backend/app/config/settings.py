@@ -1,6 +1,12 @@
+from pathlib import Path
+
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
+# <project root>/.env (see .env.example). Running uvicorn from backend/ used to look only
+# for backend/.env and miss it. A backend/.env (or real environment variables) still wins.
+_PROJECT_ENV = Path(__file__).resolve().parents[3] / ".env"
 
 class Settings(BaseSettings):
 
@@ -17,7 +23,7 @@ class Settings(BaseSettings):
     secret_key: str = Field(min_length=1)
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=(_PROJECT_ENV, ".env"),
         extra="ignore"
     )
 

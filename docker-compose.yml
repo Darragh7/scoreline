@@ -26,16 +26,20 @@ services:
     build:
       context: ./Django
       dockerfile: Dockerfile
+    # Start the website even if the API/database isn't ready yet: only login/sign-up need it.
     depends_on:
       backend:
-        condition: service_healthy
+        condition: service_started
     environment:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set DJANGO_SECRET_KEY in .env}
       DJANGO_DEBUG: ${DJANGO_DEBUG:-false}
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,[::1]}
       BACKEND_API_URL: http://backend:8000
+      PREDICTIONS_FILE: /data/predictions.json
     ports:
       - "8000:8000"
     volumes:
       - ./Django:/app
+      # predictions.json written by the ML pipeline (git-ignored), served at /api/predictions/
+      - ./data:/data:ro
     restart: unless-stopped

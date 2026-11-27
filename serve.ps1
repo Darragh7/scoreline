@@ -5,14 +5,13 @@
   Usage (from the project root):
       powershell -ExecutionPolicy Bypass -File .\serve.ps1            # port 5500
       powershell -ExecutionPolicy Bypass -File .\serve.ps1 -Port 8080
-  Stop with Ctrl+C.
-
-  Alternatives if you have them: VS Code Live Server, or `python -m http.server 5500`.
+      powershell -ExecutionPolicy Bypass -File .\serve.ps1 -Root .preview -Port 8000
+  Stop with Ctrl+C. To preview the Django site without Python, use preview.ps1.
 #>
-param([int]$Port = 5500)
+param([int]$Port = 5500, [string]$Root = $PSScriptRoot)
 
 $ErrorActionPreference = 'Stop'
-$root = (Resolve-Path $PSScriptRoot).Path
+$root = (Resolve-Path $Root).Path.TrimEnd('\') + '\'
 $prefix = "http://localhost:$Port/"
 
 $mime = @{

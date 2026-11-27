@@ -78,8 +78,13 @@
                 '</a>' +
                 '<nav class="hidden md:flex items-center gap-8" aria-label="Main">' + desktopNav() + '</nav>' +
                 '<div class="flex items-center gap-2 sm:gap-3">' +
-                    '<button type="button" data-open-modal="loginModal" class="hidden sm:inline-flex px-4 py-2.5 text-sm font-semibold text-gray-200 hover:text-white transition-colors">Log In</button>' +
-                    '<button type="button" data-open-modal="registerModal" class="hidden sm:inline-flex relative items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-ctaRed hover:bg-ctaRedHover rounded-md shadow-red-glow hover:shadow-red-glow-lg transition-all uppercase tracking-wider gap-2">' +
+                    // Shown instead of Log In / Get Started once /api/session/ says the visitor is signed in
+                    '<div data-auth-user style="display:none" class="items-center gap-3">' +
+                        '<span class="hidden sm:inline text-sm text-gray-300">Hi, <span class="font-bold text-white" data-auth-name></span></span>' +
+                        '<button type="button" data-logout class="px-4 py-2.5 text-sm font-semibold text-gray-200 hover:text-activeRed border border-sportBorder rounded-md transition-colors">Log Out</button>' +
+                    '</div>' +
+                    '<button type="button" data-auth-guest data-open-modal="loginModal" class="hidden sm:inline-flex px-4 py-2.5 text-sm font-semibold text-gray-200 hover:text-white transition-colors">Log In</button>' +
+                    '<button type="button" data-auth-guest data-open-modal="registerModal" class="hidden sm:inline-flex relative items-center justify-center px-5 py-2.5 text-sm font-bold text-white bg-ctaRed hover:bg-ctaRedHover rounded-md shadow-red-glow hover:shadow-red-glow-lg transition-all uppercase tracking-wider gap-2">' +
                         'Get Started <i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i></button>' +
                     '<button type="button" id="mobileMenuBtn" class="md:hidden w-11 h-11 inline-flex items-center justify-center rounded-lg border border-sportBorder text-gray-200 hover:text-activeRed" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">' +
                         '<i class="fa-solid fa-bars text-lg" aria-hidden="true"></i></button>' +
@@ -87,7 +92,7 @@
             '</div>' +
             '<div id="mobileMenu" class="md:hidden hidden border-t border-sportBorder/60 px-4 pb-4 pt-2">' +
                 '<nav aria-label="Mobile">' + mobileNav() + '</nav>' +
-                '<div class="grid grid-cols-2 gap-3 mt-3">' +
+                '<div class="grid grid-cols-2 gap-3 mt-3" data-auth-guest>' +
                     '<button type="button" data-open-modal="loginModal" class="py-3 rounded-lg border border-sportBorder text-sm font-semibold text-gray-200">Log In</button>' +
                     '<button type="button" data-open-modal="registerModal" class="py-3 rounded-lg bg-ctaRed text-sm font-bold text-white uppercase tracking-wider">Get Started</button>' +
                 '</div>' +
@@ -112,7 +117,7 @@
                         '<li><a href="contact.html" class="hover:text-activeRed transition-colors">Contact Us</a></li>' +
                     '</ul></div>' +
                 '<div><h2 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Account</h2>' +
-                    '<ul class="space-y-2 text-xs text-gray-400">' +
+                    '<ul class="space-y-2 text-xs text-gray-400" data-auth-guest>' +
                         '<li><button type="button" data-open-modal="loginModal" class="hover:text-activeRed transition-colors text-left">Sign In</button></li>' +
                         '<li><button type="button" data-open-modal="registerModal" class="hover:text-activeRed transition-colors text-left">Create Account</button></li>' +
                     '</ul></div>' +
@@ -128,7 +133,7 @@
             '</div>' +
         '</footer>';
 
-    function modal(id, title, subtitle, fieldsHtml, submitLabel) {
+    function modal(id, title, subtitle, fieldsHtml, submitLabel, action) {
         return '<div id="' + id + '" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[70] hidden items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="' + id + 'Title">' +
             '<div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-2xl border border-activeRed/40 shadow-red-glow relative">' +
                 '<button type="button" data-close-modal="' + id + '" class="absolute top-4 right-4 w-9 h-9 inline-flex items-center justify-center text-gray-400 hover:text-white text-xl" aria-label="Close dialog"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>' +
@@ -136,31 +141,34 @@
                     '<h2 id="' + id + 'Title" class="text-2xl font-black text-white uppercase italic">' + title + '</h2>' +
                     '<p class="text-xs text-gray-400 mt-1">' + subtitle + '</p>' +
                 '</div>' +
-                '<form class="space-y-4" data-auth-form novalidate>' + fieldsHtml +
-                    '<p class="hidden text-xs text-amber-200 bg-amber-500/10 border border-amber-500/40 rounded-lg p-3" role="status" data-auth-note>' +
-                        'Accounts aren’t connected to the backend yet, so nothing was saved. You can use the predictor without an account.</p>' +
-                    '<button type="submit" class="w-full py-3.5 bg-ctaRed hover:bg-ctaRedHover text-white font-bold rounded-lg uppercase tracking-wider text-xs shadow-red-glow transition-all">' + submitLabel + '</button>' +
+                '<form class="space-y-4" data-auth-form action="' + action + '" method="post" novalidate>' + fieldsHtml +
+                    '<p class="hidden text-xs rounded-lg p-3 border" role="status" aria-live="polite" data-auth-note></p>' +
+                    '<button type="submit" data-auth-submit class="w-full py-3.5 bg-ctaRed hover:bg-ctaRedHover text-white font-bold rounded-lg uppercase tracking-wider text-xs shadow-red-glow transition-all">' + submitLabel + '</button>' +
                 '</form>' +
             '</div></div>';
     }
-    function field(id, label, type, placeholder, autocomplete) {
+    // extra: additional input attributes, e.g. 'maxlength="50"'. Pass required=false for optional fields.
+    function field(id, name, label, type, placeholder, autocomplete, extra, required) {
         return '<div><label for="' + id + '" class="block text-xs font-semibold text-gray-300 uppercase mb-1">' + label + '</label>' +
-            '<input id="' + id + '" type="' + type + '" required placeholder="' + placeholder + '" autocomplete="' + autocomplete + '" class="w-full bg-sportCard border border-sportBorder rounded-lg p-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-activeRed"></div>';
+            '<input id="' + id + '" name="' + name + '" type="' + type + '"' + (required === false ? '' : ' required') + ' ' + (extra || '') +
+            ' placeholder="' + placeholder + '" autocomplete="' + autocomplete + '" class="w-full bg-sportCard border border-sportBorder rounded-lg p-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-activeRed"></div>';
     }
 
+    // Field names match the Django views (ScoreLine/views.py login/signup), which pass them to the FastAPI /users API.
     var modals =
         modal('loginModal', 'Welcome Back', 'Sign in to access your account',
-            field('loginEmail', 'Username or Email', 'text', 'analyst@scoreline.com', 'username') +
-            field('loginPassword', 'Password', 'password', '••••••••', 'current-password'),
-            'Sign In') +
+            field('loginEmail', 'identifier', 'Email or Phone', 'text', 'analyst@scoreline.com', 'username', 'maxlength="100"') +
+            field('loginPassword', 'password', 'Password', 'password', '••••••••', 'current-password', 'maxlength="128"'),
+            'Sign In', '/login/') +
         modal('registerModal', 'Create Account', 'Join ScoreLine today',
             '<div class="grid grid-cols-2 gap-3">' +
-                field('regFirst', 'First Name', 'text', 'Name', 'given-name') +
-                field('regLast', 'Last Name', 'text', 'Surname', 'family-name') +
+                field('regFirst', 'first_name', 'First Name', 'text', 'Name', 'given-name', 'maxlength="50"') +
+                field('regLast', 'last_name', 'Last Name', 'text', 'Surname', 'family-name', 'maxlength="50"') +
             '</div>' +
-            field('regEmail', 'Email Address', 'email', 'analyst@scoreline.com', 'email') +
-            field('regPassword', 'Password', 'password', '••••••••', 'new-password'),
-            'Register Account');
+            field('regEmail', 'email', 'Email Address', 'email', 'analyst@scoreline.com', 'email', 'maxlength="100"') +
+            field('regPhone', 'phone', 'Phone (optional)', 'tel', '+353 8X XXX XXXX', 'tel', 'maxlength="20"', false) +
+            field('regPassword', 'password', 'Password', 'password', 'At least 8 characters', 'new-password', 'minlength="8" maxlength="128"'),
+            'Register Account', '/signup/');
 
     // ---- Render ----
     var headerSlot = document.getElementById('site-header');
@@ -180,6 +188,53 @@
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderFooter);
     else renderFooter();
+
+    // ---- Accounts (Django: /login/, /signup/, /logout/, /api/session/) ----
+    function readCookie(name) {
+        var match = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+        return match ? decodeURIComponent(match[1]) : null;
+    }
+    // POSTs a form to a Django account view and returns { ok, message, user }. Never throws.
+    async function accountRequest(url, formData) {
+        if (location.protocol === 'file:') return { ok: false, message: 'Accounts need the Django server: run it and open http://localhost:8000/ (see README).' };
+        try {
+            var res = await fetch(url, {
+                method: 'POST',
+                body: formData,
+                credentials: 'same-origin',
+                headers: { 'Accept': 'application/json', 'X-CSRFToken': readCookie('csrftoken') || '' }
+            });
+            var data = await res.json().catch(function () { return null; });
+            if (data && typeof data.message === 'string') return { ok: !!data.ok && res.ok, message: data.message, user: data.user };
+            return { ok: false, message: res.status === 403
+                ? 'Your session expired. Reload the page and try again.'
+                : 'Accounts are not available here (is the Django server running?).' };
+        } catch (err) {
+            return { ok: false, message: 'Could not reach the server. Check your connection and try again.' };
+        }
+    }
+    function showAuthNote(form, message, ok) {
+        var note = form.querySelector('[data-auth-note]');
+        note.textContent = message;
+        note.className = 'text-xs rounded-lg p-3 border ' + (ok
+            ? 'text-emerald-200 bg-emerald-500/10 border-emerald-500/40'
+            : 'text-amber-200 bg-amber-500/10 border-amber-500/40');
+    }
+    function setSignedIn(firstName) {
+        var signedIn = typeof firstName === 'string';
+        document.querySelectorAll('[data-auth-guest]').forEach(function (el) { el.style.display = signedIn ? 'none' : ''; });
+        document.querySelectorAll('[data-auth-user]').forEach(function (el) { el.style.display = signedIn ? 'flex' : 'none'; });
+        document.querySelectorAll('[data-auth-name]').forEach(function (el) { el.textContent = firstName || ''; });
+    }
+    async function refreshSession() {
+        if (location.protocol === 'file:') return;
+        try {
+            var res = await fetch('/api/session/', { credentials: 'same-origin', headers: { 'Accept': 'application/json' } });
+            if (!res.ok) return;  // e.g. the no-Python preview, which has no Django views
+            var data = await res.json();
+            if (data && data.signed_in) setSignedIn(data.first_name || '');
+        } catch (e) { /* stay in signed-out view */ }
+    }
 
     // ---- Behaviour ----
     var lastFocus = null;
@@ -241,12 +296,35 @@
         });
 
         document.querySelectorAll('[data-auth-form]').forEach(function (form) {
-            form.addEventListener('submit', function (e) {
+            form.addEventListener('submit', async function (e) {
                 e.preventDefault();
                 if (!form.checkValidity()) { form.reportValidity(); return; }
-                form.querySelector('[data-auth-note]').classList.remove('hidden');
+                var btn = form.querySelector('[data-auth-submit]');
+                var label = btn.textContent;
+                btn.disabled = true;
+                btn.textContent = 'Please wait…';
+                try {
+                    var res = await accountRequest(form.getAttribute('action'), new FormData(form));
+                    showAuthNote(form, res.message, res.ok);
+                    if (res.ok) {
+                        form.reset();
+                        setSignedIn(res.user && res.user.first_name);
+                        setTimeout(function () { closeModal(form.closest('[role="dialog"]').id); }, 900);
+                    }
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = label;
+                }
             });
         });
+
+        document.addEventListener('click', async function (e) {
+            if (!e.target.closest('[data-logout]')) return;
+            var res = await accountRequest('/logout/', new FormData());
+            if (res.ok) setSignedIn(null);
+        });
+
+        refreshSession();
 
         var btn = document.getElementById('mobileMenuBtn');
         if (btn) btn.addEventListener('click', function () {
